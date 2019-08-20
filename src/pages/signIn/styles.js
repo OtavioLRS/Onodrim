@@ -1,10 +1,10 @@
 import styled from 'styled-components';
 
-const Container = styled.View`
+const Container = styled.View`  
   flex: 1;
   alignItems: center;
   justifyContent: center;
-  backgroundColor: #F5F5F5;
+  backgroundColor: #78D561;
 `;
 
 const Logo = styled.Image`
@@ -14,7 +14,7 @@ const Logo = styled.Image`
 
 const Input = styled.TextInput`
   paddingHorizontal: 20px;
-  paddingVertical: 15px;
+  paddingVertical: 5px;
   borderRadius: 5px;
   backgroundColor: #FFF;
   alignSelf: stretch;
@@ -25,38 +25,38 @@ const Input = styled.TextInput`
 
 const ErrorMessage = styled.Text`
   textAlign: center;
-  color: #ce2029;
+  color: #CE2029;
   fontSize: 16px;
   marginBottom: 15px;
   marginHorizontal: 20px;
 `;
 
-const Button = styled.TouchableHighlight`
-  padding: 20px;
+const SignInLink = styled.TouchableHighlight`
+  padding: 10px;
+  marginTop: 20px;
+  backgroundColor: #FFF;
   borderRadius: 5px;
-  backgroundColor: #FC6663;
-  alignSelf: stretch;
-  margin: 15px;
-  marginHorizontal: 20px;
 `;
 
-const ButtonText = styled.Text`
-  color: #FFF;
+const SignInLinkText = styled.Text`
+  color: #78D561;
   fontWeight: bold;
-  fontSize: 16px;
+  fontSize: 20px;
   textAlign: center;
 `;
 
 const SignUpLink = styled.TouchableHighlight`
   padding: 10px;
   marginTop: 20px;
+  backgroundColor: #78D561;
+  borderRadius: 5px;
 `;
 
 const SignUpLinkText = styled.Text`
-  color: #999;
+  color: #FFF;
   fontWeight: bold;
   fontSize: 16px;
   textAlign: center;
 `;
 
-export { Container, Logo, Input, ErrorMessage, Button, ButtonText, SignUpLink, SignUpLinkText };
+export { Container, Logo, Input, ErrorMessage, SignInLink, SignInLinkText, SignUpLink, SignUpLinkText };
