@@ -75,7 +75,7 @@ export default class SignIn extends Component {
         }
 
       } catch (_err) {
-        this.setState({ error: 'Houve um problema com o login, verifique suas credenciais!' });
+        this.setState({ error: 'CHUPA MEUPAU GRDOHouve um problema com o login, verifique suas credenciais!' });
       }
     }
   };
