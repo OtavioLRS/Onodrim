@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import { StatusBar } from 'react-native';
 
-import api from '../../services/api';
+import routes from '../../services/routes';
 import { StackActions, NavigationActions } from 'react-navigation';
 
 import {
@@ -32,23 +32,23 @@ export default class SignUp extends Component {
   };
 
   state = {
-    username: 'admin',
+    nome: 'admin',
     email: 'admin@admin',
-    password: 'admin',
+    senha: 'admin',
     error: '',
     success: '',
   };
 
-  handleUsernameChange = (username) => {
-    this.setState({ username });
+  handleNomeChange = (nome) => {
+    this.setState({ nome });
   };
 
   handleEmailChange = (email) => {
     this.setState({ email });
   };
 
-  handlePasswordChange = (password) => {
-    this.setState({ password });
+  handleSenhaChange = (senha) => {
+    this.setState({ senha });
   };
 
   handleBackToLoginPress = () => {
@@ -56,23 +56,15 @@ export default class SignUp extends Component {
   };
 
   handleSignUpPress = async () => {
-    if (this.state.email.length === 0 || this.state.password.length === 0) {
+    if (this.state.email.length === 0 || this.state.senha.length === 0) {
       this.setState({ error: 'Preencha todos os campos para continuar!' }, () => false);
     } else {
       try {
-        if (this.state.email == 'admin@admin' && this.state.username == 'admin' && this.state.password == 'admin')
-         {
-          this.setState({ success: 'Conta criada com sucesso! Redirecionando para o login', error: '' });
-
-          setTimeout(this.goToLogin, 2500);
-         } 
-
-        // await api.post('/users', {
-        //   username: this.state.username,
-        //   email: this.state.email,
-        //   password: this.state.password,
-        // });
-
+        await routes.post('/users', JSON.stringify({
+          nome: this.state.nome,
+          email: this.state.email,
+          senha: this.state.senha,
+        }));
         this.setState({ success: 'Conta criada com sucesso! Redirecionando para o login', error: '' });
 
         setTimeout(this.goToLogin, 2500);
@@ -100,8 +92,8 @@ export default class SignUp extends Component {
         {this.state.success.length !== 0 && <SuccessMessage>{this.state.success}</SuccessMessage>}
         <Input
           placeholder="Nome completo"
-          value={this.state.username}
-          onChangeText={this.handleUsernameChange}
+          value={this.state.nome}
+          onChangeText={this.handleNomeChange}
           autoCapitalize="none"
           autoCorrect={false}
         />
@@ -114,8 +106,8 @@ export default class SignUp extends Component {
         />
         <Input
           placeholder="Senha"
-          value={this.state.password}
-          onChangeText={this.handlePasswordChange}
+          value={this.state.senha}
+          onChangeText={this.handleSenhaChange}
           autoCapitalize="none"
           autoCorrect={false}
           secureTextEntry

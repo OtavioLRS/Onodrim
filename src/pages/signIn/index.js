@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { StatusBar } from 'react-native';
 import { StackActions, NavigationActions } from 'react-navigation';
 
-import api from '../../services/api';
+import routes from '../../services/routes';
 
 import {
   Container,
@@ -31,7 +31,7 @@ export default class SignIn extends Component {
 
   state = {
     email: 'admin@admin',
-    password: 'admin',
+    senha: 'admin',
     error: '',
   };
 
@@ -39,8 +39,8 @@ export default class SignIn extends Component {
     this.setState({ email });
   };
 
-  handlePasswordChange = (password) => {
-    this.setState({ password });
+  handleSenhaChange = (senha) => {
+    this.setState({ senha });
   };
 
   handleCreateAccountPress = () => {
@@ -48,14 +48,14 @@ export default class SignIn extends Component {
   };
 
   handleSignInPress = async () => {
-    if (this.state.email.length === 0 || this.state.password.length === 0) {
+    if (this.state.email.length === 0 || this.state.senha.length === 0) {
       this.setState({ error: 'Insira seu e-mail e senha para continuar!' }, () => false);
     } else {
       try {
-        const response = await api.post('/sessions', {
-          email: this.state.email,
-          password: this.state.password,
-        });
+        // await routes.post('/users', JSON.stringify({
+        //   email: this.state.email,
+        //   senha: this.state.senha,
+        // }));
 
         // const resetAction = StackActions.reset({
         //   index: 0,
@@ -64,7 +64,7 @@ export default class SignIn extends Component {
         //   ],
         // });
         // this.props.navigation.dispatch(resetAction);
-        if (this.state.email == 'admin@admin' && this.state.password == 'admin'){
+        if (this.state.email == 'admin@admin' && this.state.senha == 'admin'){
           const resetAction = StackActions.reset({
             index: 0,
             actions: [
@@ -75,7 +75,7 @@ export default class SignIn extends Component {
         }
 
       } catch (_err) {
-        this.setState({ error: 'CHUPA MEUPAU GRDOHouve um problema com o login, verifique suas credenciais!' });
+        this.setState({ error: 'Houve um problema com o login, verifique suas credenciais!' });
       }
     }
   };
@@ -94,8 +94,8 @@ export default class SignIn extends Component {
         />
         <Input
           placeholder="Senha"
-          value={this.state.password}
-          onChangeText={this.handlePasswordChange}
+          value={this.state.senha}
+          onChangeText={this.handleSenhaChange}
           autoCapitalize="none"
           autoCorrect={false}
           secureTextEntry

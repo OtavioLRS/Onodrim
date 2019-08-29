@@ -1,9 +1,13 @@
 CREATE DATABASE Onodrim;
 
 CREATE TABLE Usuario (
-	email_usuario varchar(30) NOT NULL,
-	nome_usuario varchar(50) NOT NULL,
-	senha_usuario varchar(50) NOT NULL,
-	grau_permissao int(2) NOT NULL,
-	CONSTRAINT pk_email PRIMARY KEY (email_usuario)
+	email varchar(100) NOT NULL,
+	nome varchar(100) NOT NULL,
+	senha varchar(100) NOT NULL,
+	grau_permissao int(1) NOT NULL,
+	CONSTRAINT pk_email PRIMARY KEY (email)
 );
+
+INSERT INTO Usuario VALUES ('leonardo.higuti@unesp.br', 'Leonardo Yudi Higuti', MD5('leo123'), 3);
+
+INSERT INTO Usuario VALUES ('otavio.leite@unesp.br', 'Otávio Leite dos Santos', MD5('otavio123'), 3);
