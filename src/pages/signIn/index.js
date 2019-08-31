@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { StatusBar } from 'react-native';
 import { StackActions, NavigationActions } from 'react-navigation';
 
-import routes from '../../services/routes';
+//import routes from '../../services/routes';
 
 import {
   Container,
@@ -30,7 +30,7 @@ export default class SignIn extends Component {
   };
 
   state = {
-    email: 'admin@admin',
+    email: 'admin@adminnnn',
     senha: 'admin',
     error: '',
   };
@@ -57,6 +57,13 @@ export default class SignIn extends Component {
         //   senha: this.state.senha,
         // }));
 
+        //.then(response => response.json()).then(users => console.warn(users));
+
+        
+
+      
+
+        
         // const resetAction = StackActions.reset({
         //   index: 0,
         //   actions: [
@@ -64,15 +71,15 @@ export default class SignIn extends Component {
         //   ],
         // });
         // this.props.navigation.dispatch(resetAction);
-        if (this.state.email == 'admin@admin' && this.state.senha == 'admin'){
-          const resetAction = StackActions.reset({
-            index: 0,
-            actions: [
-              NavigationActions.navigate({ routeName: 'Main' }),
-            ],
-          });
-          this.props.navigation.dispatch(resetAction);
-        }
+        // if (this.state.email == 'admin@adminnnn' && this.state.senha == 'admin'){
+        //   const resetAction = StackActions.reset({
+        //     index: 0,
+        //     actions: [
+        //       NavigationActions.navigate({ routeName: 'Main' }),
+        //     ],
+        //   });
+        //   this.props.navigation.dispatch(resetAction);
+        // }
 
       } catch (_err) {
         this.setState({ error: 'Houve um problema com o login, verifique suas credenciais!' });
@@ -84,7 +91,7 @@ export default class SignIn extends Component {
     return (
       <Container>
         <StatusBar hidden />
-        <Logo source={require('../../images/airbnb_logo.png')} resizeMode="contain" />
+        <Logo source={require('../../images/logo.png')} resizeMode="contain" />
         <Input
           placeholder="Endereço de e-mail"
           value={this.state.email}

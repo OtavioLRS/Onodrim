@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import { StatusBar } from 'react-native';
 
-import routes from '../../services/routes';
+// import routes from '../../services/routes';
 import { StackActions, NavigationActions } from 'react-navigation';
 
 import {
@@ -33,7 +33,7 @@ export default class SignUp extends Component {
 
   state = {
     nome: 'admin',
-    email: 'admin@admin',
+    email: 'admin@adminnnn',
     senha: 'admin',
     error: '',
     success: '',
@@ -56,20 +56,34 @@ export default class SignUp extends Component {
   };
 
   handleSignUpPress = async () => {
-    if (this.state.email.length === 0 || this.state.senha.length === 0) {
+    if (this.state.nome.length === 0 || this.state.email.length === 0 || this.state.senha.length === 0) {
       this.setState({ error: 'Preencha todos os campos para continuar!' }, () => false);
     } else {
       try {
-        await routes.post('/users', JSON.stringify({
-          nome: this.state.nome,
-          email: this.state.email,
-          senha: this.state.senha,
-        }));
-        this.setState({ success: 'Conta criada com sucesso! Redirecionando para o login', error: '' });
 
-        setTimeout(this.goToLogin, 2500);
+        fetch('http://192.168.0.102:3333/users', {
+          method: 'POST',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+          }, 
+          body: JSON.stringify({
+            nome: this.state.nome,
+            email: this.state.email,
+            senha: this.state.senha
+          }),
+        })
+        .then((response) => response.json())
+        .then((responseJson) => {
+          if(responseJson.ok === false)
+            this.setState({ error: 'O e-mail inserido já é cadastrado!' }, () => false);
+          else {
+            this.setState({ success: 'Conta criada com sucesso! Retornando para a tela de login', error: '' });
+            setTimeout(this.goToLogin, 2500);
+          }
+        })
       } catch (_err) {
-        this.setState({ error: 'Houve um problema com o cadastro, verifique os dados preenchidos!' });
+        console.log("fudeu");
       }
     }
   };
@@ -88,7 +102,7 @@ export default class SignUp extends Component {
     return (
       <Container>
         <StatusBar hidden />
-        <Logo source={require('../../images/airbnb_logo.png')} resizeMode="contain" />
+        <Logo source={require('../../images/logo.png')} resizeMode="contain" />
         {this.state.success.length !== 0 && <SuccessMessage>{this.state.success}</SuccessMessage>}
         <Input
           placeholder="Nome completo"

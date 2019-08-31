@@ -1,5 +1,5 @@
 const express = require('express');
-const bodyParser = require('body-parser');
+//const bodyParser = require('body-parser');
 const mysql = require('mysql');
 
 const routes = express.Router();
@@ -23,13 +23,12 @@ routes.get('/users', function (req, res) {
 routes.post('/users', (req, res) => {
     connection.getConnection(function (err, connection) {
         connection.query(`CALL insertUser('${req.body.nome}','${req.body.email}','${req.body.senha}');`, function (error, results, fields) {
-        //connection.query(`INSERT INTO usuario VALUES('${req.body.email}', '${req.body.nome}', MD5('${req.body.senha}'), ${req.body.grau_permissao});`, function (error, results, fields) {
-            if (error !== null && error.errno == 1062) console.log("E-mail ja cadastrado!");
-            res.send(results);
+            if (error === null) 
+                return res.json({ ok: true });
+            else
+                return res.json({ ok: false });
         });
     });
-    res.send({ "ok": true })
-    //return res.json({ "ok": true });
 })
 
 module.exports = routes;
