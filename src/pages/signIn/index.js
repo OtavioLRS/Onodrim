@@ -30,8 +30,8 @@ export default class SignIn extends Component {
   };
 
   state = {
-    email: 'admin@adminnnn',
-    senha: 'admin',
+    email: 'adm',
+    senha: 'adm',
     error: '',
   };
 
@@ -51,39 +51,48 @@ export default class SignIn extends Component {
     if (this.state.email.length === 0 || this.state.senha.length === 0) {
       this.setState({ error: 'Insira seu e-mail e senha para continuar!' }, () => false);
     } else {
-      try {
-        // await routes.post('/users', JSON.stringify({
-        //   email: this.state.email,
-        //   senha: this.state.senha,
-        // }));
+        // await fetch('http://192.168.0.107:3333/signin', {
+        await fetch('http://192.168.43.169:3333/signin', {
+        // await fetch('http://172.16.222.76:3333/signin', {
+          method: 'POST',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            email: this.state.email,
+            senha: this.state.senha
+          }),
+        })
+          .then((response) => response.json())
+          .then((responseJson) => {
+            if(responseJson == '') {
+              this.setState({ error: 'O(s) e-mail/senha inserido(s) estão incorretos!' }, () => false);
+            }
+            else {
+              const resetAction = StackActions.reset({
+                index: 0,
+                actions: [
+                  NavigationActions.navigate({ routeName: 'Main' }),
+                ],
+              });
+              this.props.navigation.dispatch(resetAction);
+            }
+          })
+          .catch(function (error) {
+            alert(error);
+            console.log('There has been a problem with your fetch operation: ' + error.message);
+            throw error;
+          });
 
-        //.then(response => response.json()).then(users => console.warn(users));
+      const resetAction = StackActions.reset({
+        index: 0,
+        actions: [
+          NavigationActions.navigate({ routeName: 'Main', params: { token: response.data.token } }),
+        ],
+      });
 
-        
-
-      
-
-        
-        // const resetAction = StackActions.reset({
-        //   index: 0,
-        //   actions: [
-        //     NavigationActions.navigate({ routeName: 'Main', params: { token: response.data.token } }),
-        //   ],
-        // });
-        // this.props.navigation.dispatch(resetAction);
-        // if (this.state.email == 'admin@adminnnn' && this.state.senha == 'admin'){
-        //   const resetAction = StackActions.reset({
-        //     index: 0,
-        //     actions: [
-        //       NavigationActions.navigate({ routeName: 'Main' }),
-        //     ],
-        //   });
-        //   this.props.navigation.dispatch(resetAction);
-        // }
-
-      } catch (_err) {
-        this.setState({ error: 'Houve um problema com o login, verifique suas credenciais!' });
-      }
+      this.props.navigation.dispatch(resetAction);
     }
   };
 

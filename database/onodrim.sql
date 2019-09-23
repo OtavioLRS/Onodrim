@@ -1,6 +1,6 @@
 CREATE DATABASE Onodrim;
 
-CREATE TABLE Usuario (
+CREATE TABLE usuario (
 	email varchar(100) NOT NULL,
 	nome varchar(100) NOT NULL,
 	senha varchar(100) NOT NULL,

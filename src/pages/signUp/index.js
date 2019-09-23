@@ -33,7 +33,7 @@ export default class SignUp extends Component {
 
   state = {
     nome: 'admin',
-    email: 'admin@adminnnn',
+    email: '',
     senha: 'admin',
     error: '',
     success: '',
@@ -59,9 +59,9 @@ export default class SignUp extends Component {
     if (this.state.nome.length === 0 || this.state.email.length === 0 || this.state.senha.length === 0) {
       this.setState({ error: 'Preencha todos os campos para continuar!' }, () => false);
     } else {
-      try {
-
-        fetch('http://192.168.0.102:3333/users', {
+        // await fetch('http://192.168.0.107:3333/signup', {
+        await fetch('http://192.168.43.169:3333/signup', {
+        // await fetch('http://172.16.222.76:3333/signup', {
           method: 'POST',
           headers: {
             Accept: 'application/json',
@@ -82,9 +82,11 @@ export default class SignUp extends Component {
             setTimeout(this.goToLogin, 2500);
           }
         })
-      } catch (_err) {
-        console.log("fudeu");
-      }
+          .catch(function (error) {
+            alert(error.message);
+            console.log('There has been a problem with your fetch operation: ' + error.message);
+            throw error;
+          });
     }
   };
 
