@@ -63,7 +63,7 @@ export default class SignUp extends Component {
         await fetch('http://192.168.43.169:3333/signup', {
         // await fetch('http://172.16.222.76:3333/signup', {
           method: 'POST',
-          headers: {
+          headers: {s 
             Accept: 'application/json',
             'Content-Type': 'application/json',
           }, 
@@ -73,6 +73,7 @@ export default class SignUp extends Component {
             senha: this.state.senha
           }),
         })
+        .then((response) => alert(response))
         .then((response) => response.json())
         .then((responseJson) => {
           if(responseJson.ok === false)
