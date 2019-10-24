@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 
 import { StatusBar } from 'react-native';
 
-// import routes from '../../services/routes';
 import { StackActions, NavigationActions } from 'react-navigation';
 
 import {
@@ -32,9 +31,9 @@ export default class SignUp extends Component {
   };
 
   state = {
-    nome: 'admin',
-    email: '',
-    senha: 'admin',
+    nome: 'adm',
+    email: 'adm',
+    senha: 'adm',
     error: '',
     success: '',
   };
@@ -59,11 +58,11 @@ export default class SignUp extends Component {
     if (this.state.nome.length === 0 || this.state.email.length === 0 || this.state.senha.length === 0) {
       this.setState({ error: 'Preencha todos os campos para continuar!' }, () => false);
     } else {
-        // await fetch('http://192.168.0.107:3333/signup', {
-        await fetch('http://192.168.43.169:3333/signup', {
+        await fetch('http://192.168.0.102:3333/signup', {
+        // await fetch('http://192.168.43.169:3333/signup', {
         // await fetch('http://172.16.222.76:3333/signup', {
           method: 'POST',
-          headers: {s 
+          headers: { 
             Accept: 'application/json',
             'Content-Type': 'application/json',
           }, 
@@ -73,11 +72,10 @@ export default class SignUp extends Component {
             senha: this.state.senha
           }),
         })
-        .then((response) => alert(response))
         .then((response) => response.json())
         .then((responseJson) => {
-          if(responseJson.ok === false)
-            this.setState({ error: 'O e-mail inserido já é cadastrado!' }, () => false);
+          if (typeof(responseJson[0][0].erro) !== "undefined")
+            this.setState({ error: responseJson[0][0].erro }, () => false);
           else {
             this.setState({ success: 'Conta criada com sucesso! Retornando para a tela de login', error: '' });
             setTimeout(this.goToLogin, 2500);

@@ -22,18 +22,15 @@ routes.get('/users', function (req, res) {
 
 routes.post('/signup', (req, res) => {
     connection.getConnection(function (err, connection) {
-        connection.query(`CALL insertUser('${req.body.nome}','${req.body.email}','${req.body.senha}');`, function (error, results, fields) {
-            if (error === null) 
-                return res.json({ ok: true });
-            else
-                return res.json({ ok: false });
+        connection.query(`CALL insertUser('${req.body.nome}', '${req.body.email}', '${req.body.senha}', 1);`, function (error, results, fields) {
+            return res.json(results);
         });
     });
 })
 
 routes.post('/signin', (req, res) => {
     connection.getConnection(function (err, connection) {
-        connection.query(`SELECT * FROM usuario WHERE email = '${req.body.email}' AND senha = MD5('${req.body.senha}');`, function (error, results, fields) {
+        connection.query(`CALL loginUser('${req.body.email}', MD5('${req.body.senha}'));`, (error, results, fields) => {
             return res.json(results);
         });
     });

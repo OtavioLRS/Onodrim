@@ -4,8 +4,6 @@ import PropTypes from 'prop-types';
 import { StatusBar } from 'react-native';
 import { StackActions, NavigationActions } from 'react-navigation';
 
-//import routes from '../../services/routes';
-
 import {
   Container,
   Logo,
@@ -17,11 +15,13 @@ import {
   SignUpLinkText,
 } from './styles';
 
+
+
 export default class SignIn extends Component {
   static navigationOptions = {
     header: null,
   };
-
+  
   static propTypes = {
     navigation: PropTypes.shape({
       navigate: PropTypes.func,
@@ -51,8 +51,8 @@ export default class SignIn extends Component {
     if (this.state.email.length === 0 || this.state.senha.length === 0) {
       this.setState({ error: 'Insira seu e-mail e senha para continuar!' }, () => false);
     } else {
-        // await fetch('http://192.168.0.107:3333/signin', {
-        await fetch('http://192.168.43.169:3333/signin', {
+        await fetch('http://192.168.0.102:3333/signin', {
+        // await fetch('http://192.168.43.169:3333/signin', {
         // await fetch('http://172.16.222.76:3333/signin', {
           method: 'POST',
           headers: {
@@ -66,17 +66,10 @@ export default class SignIn extends Component {
         })
           .then((response) => response.json())
           .then((responseJson) => {
-            if(responseJson == '') {
-              this.setState({ error: 'O(s) e-mail/senha inserido(s) estão incorretos!' }, () => false);
-            }
+            if (typeof (responseJson[0][0].erro) !== "undefined")
+              this.setState({ error: responseJson[0][0].erro }, () => false);
             else {
-              const resetAction = StackActions.reset({
-                index: 0,
-                actions: [
-                  NavigationActions.navigate({ routeName: 'Main' }),
-                ],
-              });
-              this.props.navigation.dispatch(resetAction);
+              this.logIn;
             }
           })
           .catch(function (error) {
@@ -84,17 +77,18 @@ export default class SignIn extends Component {
             console.log('There has been a problem with your fetch operation: ' + error.message);
             throw error;
           });
-
-      const resetAction = StackActions.reset({
-        index: 0,
-        actions: [
-          NavigationActions.navigate({ routeName: 'Main', params: { token: response.data.token } }),
-        ],
-      });
-
-      this.props.navigation.dispatch(resetAction);
     }
   };
+
+  logIn = () => {
+    const resetAction = StackActions.reset({
+      index: 0,
+      actions: [
+        NavigationActions.navigate({ routeName: 'Main' }),
+      ],
+    });
+    this.props.navigation.dispatch(resetAction);
+  }
 
   render() {
     return (
