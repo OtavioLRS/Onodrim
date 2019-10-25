@@ -4,51 +4,63 @@
 USE Onodrim;
 
 CREATE TABLE Usuario (
-    email varchar(100) NOT NULL,
-	nome varchar(100) NOT NULL,
-	senha varchar(100) NOT NULL,
-	grau_permissao int(1) NOT NULL,
+    email VARCHAR(100) NOT NULL,
+	nome VARCHAR(100) NOT NULL,
+	senha VARCHAR(100) NOT NULL,
+	grau_permissao INT(1) NOT NULL,
     CONSTRAINT pk_usuario PRIMARY KEY (email)
 );
 
 CREATE TABLE Tipo (
-	nome_cientifico varchar(100) NOT NULL,
-    nome_popular varchar(100) NOT NULL,
-    fruto varchar(100),
-    utilidade varchar(1000),
+	nome_cientifico VARCHAR(100) NOT NULL,
+    nome_popular VARCHAR(100) NOT NULL,
+    fruto VARCHAR(100),
+    utilidade VARCHAR(1000),
     CONSTRAINT pk_tipo PRIMARY KEY (nome_cientifico)
 );
 
 CREATE TABLE Localizacao (
-	latitude float NOT NULL,
-    longitude float NOT NULL,
-    cep int(8),
-    rua varchar(100),
-    bairro varchar(100),
-    cidade varchar(100),
+	latitude FLOAT NOT NULL,
+    longitude FLOAT NOT NULL,
+    cep INT(8),
+    rua VARCHAR(100),
+    bairro VARCHAR(100),
+    cidade VARCHAR(100),
     CONSTRAINT pk_localizacao PRIMARY KEY (latitude, longitude)
 );
 
 CREATE TABLE Arvore (
-	id_arvore int auto_increment NOT NULL,
-    nome_cientifico varchar(100) NOT NULL,
-    latitude float NOT NULL,
-    longitude float NOT NULL,
-    altura float,
-    largura float, 
-    ano_plantio date,
-    data_cadastro date NOT NULL,
-    fotos varchar(200) NOT NULL,
+	id_arvore INT AUTO_INCREMENT NOT NULL,
+    nome_cientifico VARCHAR(100) NOT NULL,
+    latitude FLOAT NOT NULL,
+    longitude FLOAT NOT NULL,
+    altura FLOAT,
+    largura FLOAT,
+    ano_plantio DATE,
+    data_cadastro DATE NOT NULL,
+    fotos VARCHAR(1000),
     CONSTRAINT pk_arvore PRIMARY KEY (id_arvore),
-    CONSTRAINT fk_tipo FOREIGN KEY (nome_cientifico) REFERENCES Tipo (nome_cientifico),
+    CONSTRAINT fk_tipo1 FOREIGN KEY (nome_cientifico) REFERENCES Tipo (nome_cientifico),
     CONSTRAINT fk_localizacao FOREIGN KEY (latitude, longitude) REFERENCES Localizacao (latitude, longitude)
 );
 
 CREATE TABLE Tombamento (
-	id_arvore int NOT NULL,
-	motivo varchar(1000),
-    decreto varchar(20),
+	id_arvore INT NOT NULL,
+	motivo VARCHAR(1000),
+    decreto VARCHAR(20),
     CONSTRAINT fk_arvore FOREIGN KEY (id_arvore) REFERENCES Arvore (id_arvore)
+);
+
+CREATE TABLE Sugestao (
+    id_sugestao INT AUTO_INCREMENT NOT NULL,
+    tipo VARCHAR(100) NOT NULL,
+    usuario VARCHAR(100) NOT NULL,
+    data_sugestao DATE NOT NULL,
+    checado BOOLEAN NOT NULL,
+    data_checagem DATE,
+	CONSTRAINT pk_sugestao PRIMARY KEY (id_sugestao),
+    CONSTRAINT fk_tipo2 FOREIGN KEY (tipo) REFERENCES Tipo (nome_cientifico),
+    CONSTRAINT fk_usuario FOREIGN KEY (usuario) REFERENCES Usuario (email)
 );
 
 INSERT INTO Usuario(email, nome, senha, grau_permissao) VALUES ('otavio.leite@unesp.br', 'Otávio Leite dos Santos', MD5('otavio123'), 3);
