@@ -1,7 +1,7 @@
 -- CREATE DATABASE Onodrim;
--- DROP TABLE Usuario;
+-- DROP DATABASE Onodrim;
 
-USE Onodrim;
+-- USE Onodrim;
 
 CREATE TABLE Usuario (
     email VARCHAR(100) NOT NULL,
@@ -12,11 +12,16 @@ CREATE TABLE Usuario (
 );
 
 CREATE TABLE Tipo (
+	id_tipo INT AUTO_INCREMENT NOT NULL,
 	nome_cientifico VARCHAR(100) NOT NULL,
     nome_popular VARCHAR(100) NOT NULL,
     fruto VARCHAR(100),
     utilidade VARCHAR(1000),
-    CONSTRAINT pk_tipo PRIMARY KEY (nome_cientifico)
+    usuario VARCHAR(100) NOT NULL,
+    data_sugestao DATE NOT NULL,
+    checado BOOLEAN NOT NULL,
+    data_checagem DATE,
+    CONSTRAINT pk_tipo PRIMARY KEY (id_tipo)
 );
 
 CREATE TABLE Localizacao (
@@ -31,7 +36,7 @@ CREATE TABLE Localizacao (
 
 CREATE TABLE Arvore (
 	id_arvore INT AUTO_INCREMENT NOT NULL,
-    nome_cientifico VARCHAR(100) NOT NULL,
+    id_tipo INT NOT NULL,
     latitude FLOAT NOT NULL,
     longitude FLOAT NOT NULL,
     altura FLOAT,
@@ -40,7 +45,7 @@ CREATE TABLE Arvore (
     data_cadastro DATE NOT NULL,
     fotos VARCHAR(1000),
     CONSTRAINT pk_arvore PRIMARY KEY (id_arvore),
-    CONSTRAINT fk_tipo1 FOREIGN KEY (nome_cientifico) REFERENCES Tipo (nome_cientifico),
+    CONSTRAINT fk_tipo FOREIGN KEY (id_tipo) REFERENCES Tipo (id_tipo),
     CONSTRAINT fk_localizacao FOREIGN KEY (latitude, longitude) REFERENCES Localizacao (latitude, longitude)
 );
 
@@ -51,19 +56,6 @@ CREATE TABLE Tombamento (
     CONSTRAINT fk_arvore FOREIGN KEY (id_arvore) REFERENCES Arvore (id_arvore)
 );
 
-CREATE TABLE Sugestao (
-    id_sugestao INT AUTO_INCREMENT NOT NULL,
-    tipo VARCHAR(100) NOT NULL,
-    usuario VARCHAR(100) NOT NULL,
-    data_sugestao DATE NOT NULL,
-    checado BOOLEAN NOT NULL,
-    data_checagem DATE,
-	CONSTRAINT pk_sugestao PRIMARY KEY (id_sugestao),
-    CONSTRAINT fk_tipo2 FOREIGN KEY (tipo) REFERENCES Tipo (nome_cientifico),
-    CONSTRAINT fk_usuario FOREIGN KEY (usuario) REFERENCES Usuario (email)
-);
-
 INSERT INTO Usuario(email, nome, senha, grau_permissao) VALUES ('otavio.leite@unesp.br', 'Otávio Leite dos Santos', MD5('otavio123'), 3);
 
 INSERT INTO Usuario(email, nome, senha, grau_permissao) VALUES ('leonardo.higuti@unesp.br', 'Leonardo Yudi Higuti', MD5('leo123'), 3);
-
