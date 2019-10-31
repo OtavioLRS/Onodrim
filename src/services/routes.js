@@ -26,7 +26,7 @@ routes.post('/signup', (req, res) => {
             return res.json(results);
         });
     });
-})
+});
 
 routes.post('/signin', (req, res) => {
     connection.getConnection(function (err, connection) {
@@ -34,6 +34,28 @@ routes.post('/signin', (req, res) => {
             return res.json(results);
         });
     });
-})
+});
+
+routes.post('/sugerir', (req, res) => {
+    connection.getConnection(function (err, connection) {
+        connection.query(``, (error, results, fields) => {
+            return res.json(results);
+        });
+    });
+});
+
+routes.post('/arvore', (req, res) => {
+    connection.getConnection(function (err, connection) {
+        connection.query(``, (error, results, fields) => {
+            return res.json(results);
+        });
+    });
+});
+
+
+
+
+
+
 
 module.exports = routes;
