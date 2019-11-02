@@ -25,3 +25,31 @@ BEGIN
 	 END IF;
 	END IF;
 END//
+
+DROP PROCEDURE if exists insertTipo//
+CREATE PROCEDURE insertTipo(v_nome_cientifico VARCHAR(100), v_nome_popular VARCHAR(100), v_fruto VARCHAR(100), v_utilidade VARCHAR(1000), v_usuario VARCHAR(100), v_data_sugestao DATE)
+BEGIN
+	DECLARE real_email, real_nome_cientifico VARCHAR(100);
+	SELECT email INTO real_email FROM Usuario WHERE email = usuario;
+    SELECT nome_cientifico INTO real_nome_cientifico FROM Tipo WHERE nome_cientifico = v_nome_cientifico;
+    IF(real_email IS NULL) THEN 
+		SELECT 'Email não cadastrado!';
+	ELSE IF (real_nome_cientifico IS NULL) THEN
+			INSERT INTO Tipo(nome_cientifico, nome_popular, fruto, utilidade, usuario, data_sugestao, checado) VALUES (v_nome_cientifico, v_nome_popular, v_fruto, v_utilidade, v_usuario, v_data_sugestao, 1);
+		ELSE
+			SELECT 'Tipo já cadastrado!';
+        END IF;
+    END IF;
+END//
+
+DROP PROCEDURE if exists insertArvore//
+CREATE PROCEDURE insertArvore()
+BEGIN
+
+END//
+
+DROP PROCEDURE if exists insertTombamento//
+CREATE PROCEDURE insertTombamento(id_arvore INT(11), motivo VARCHAR(1000), decreto VARCHAR(20))
+BEGIN
+	
+END//

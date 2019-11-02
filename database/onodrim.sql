@@ -19,9 +19,10 @@ CREATE TABLE Tipo (
     utilidade VARCHAR(1000),
     usuario VARCHAR(100) NOT NULL,
     data_sugestao DATE NOT NULL,
-    checado BOOLEAN NOT NULL,
+    checado INT(1) NOT NULL,
     data_checagem DATE,
-    CONSTRAINT pk_tipo PRIMARY KEY (id_tipo)
+    CONSTRAINT pk_tipo PRIMARY KEY (id_tipo),
+    CONSTRAINT fk_usuario FOREIGN KEY (usuario) REFERENCES Usuario(email)
 );
 
 CREATE TABLE Localizacao (
