@@ -29,6 +29,8 @@ target 'Onodrim' do
 
   pod 'react-native-maps', :path => '../node_modules/react-native-maps'
 
+  pod 'react-native-geolocation', :path => '../node_modules/@react-native-community/geolocation'
+
   target 'OnodrimTests' do
     inherit! :search_paths
     # Pods for testing
