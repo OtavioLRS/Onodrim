@@ -62,19 +62,41 @@ BEGIN
     IF(real_latitude IS NULL) THEN
 		INSERT INTO Localizacao (latitude, longitude, cep, rua, bairro, cidade) VALUES (v_latitude, v_longitude, v_cep, v_rua, v_bairro, v_cidade);
 	ELSE IF (real_longitude IS NOT NULL) THEN
-		SELECT ('Localizacao já cadastrada') AS erro;
-        END IF;
+			SELECT ('Localizacao já cadastrada') AS erro;
+		END IF;
 	END IF;
 END//
 
 DROP PROCEDURE if exists insertArvore//
-CREATE PROCEDURE insertArvore()
+CREATE PROCEDURE insertArvore(v_id_tipo INT, v_latitude FLOAT, v_longitude FLOAT, v_altura FLOAT, v_largura FLOAT, v_ano_plantio DATE, v_fotos VARCHAR(1000))
 BEGIN
-	
+	DECLARE real_latitude, real_longitude FLOAT;
+    DECLARE real_id_tipo INT;
+    SELECT latitude, longitude INTO real_latitude, real_longitude FROM Localizacao WHERE latitude = real_latitude and longitude = real_longitude;
+	SELECT id_tipo INTO real_id_tipo FROM Tipo WHERE id_tipo = v_id_tipo AND checado = 2;
+    IF(real_latitude IS NOT NULL) THEN
+		IF(real_longitude IS NOT NULL) THEN
+			IF(real_id_tipo IS NOT NULL) THEN
+				INSERT INTO Arvore(id_tipo, latitude, longitude, altura, largura, ano_plantio, fotos) VALUES (v_id_tipo, v_latitude, v_longitude, v_altura, v_largura, v_ano_plantio, v_fotos);
+			ELSE
+				SELECT 'Tipo não aprovado' AS erro;
+			END IF;
+		ELSE
+			SELECT 'Local não registrado' AS erro;
+		END IF;
+	ELSE
+		SELECT 'Local não registrado' AS erro;
+	END IF;
 END//
 
 DROP PROCEDURE if exists insertTombamento//
-CREATE PROCEDURE insertTombamento(id_arvore INT(11), motivo VARCHAR(1000), decreto VARCHAR(20))
+CREATE PROCEDURE insertTombamento(v_id_arvore INT, v_motivo VARCHAR(1000), v_decreto VARCHAR(20))
 BEGIN
-	
+	DECLARE real_id_arvore INT;
+    SELECT id_arvore INTO real_id_arvore FROM Arvore WHERE id_arvore = v_id_arvore;
+    IF(real_id_arvore IS NULL) THEN
+		SELECT 'Árvore não cadastrada' AS erro;
+	ELSE
+		INSERT INTO Tombamento(id_arvore, motivo, decreto) VALUES (v_id_arvore, v_motivo, v_decreto);
+    END IF;
 END//
