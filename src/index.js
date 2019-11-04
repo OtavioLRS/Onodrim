@@ -9,7 +9,7 @@ const AppContainer = createAppContainer(Routes);
 
 export default class App extends Component {
   
-  async componentWillMount() {
+  async componentDidMount() {
     await requestLocationPermission();
   }
 
