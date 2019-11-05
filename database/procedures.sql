@@ -77,7 +77,7 @@ BEGIN
     IF(real_latitude IS NOT NULL) THEN
 		IF(real_longitude IS NOT NULL) THEN
 			IF(real_id_tipo IS NOT NULL) THEN
-				INSERT INTO Arvore(id_tipo, latitude, longitude, altura, largura, ano_plantio, fotos) VALUES (v_id_tipo, v_latitude, v_longitude, v_altura, v_largura, v_ano_plantio, v_fotos);
+				INSERT INTO Arvore(id_tipo, latitude, longitude, altura, largura, ano_plantio, data_cadastro, fotos) VALUES (v_id_tipo, v_latitude, v_longitude, v_altura, v_largura, v_ano_plantio, current_date(), v_fotos);
 			ELSE
 				SELECT 'Tipo não aprovado' AS erro;
 			END IF;
@@ -89,7 +89,13 @@ BEGIN
 	END IF;
 END//
 
-DROP PROCEDURE if exists insertTombamento//
+DROP PROCEDURE IF EXISTS updateArvore//
+CREATE PROCEDURE updateArvore(v_id_arvore INT, v_id_tipo INT, v_altura FLOAT, v_largura FLOAT, v_ano_plantio DATE, v_fotos VARCHAR(1000))
+BEGIN
+	UPDATE Arvore SET id_tipo = v_id_tipo, altura = v_altura, largura = v_largura, ano_plantio = v_ano_plantio, fotos = v_fotos WHERE id_arvore = v_id_arvore;
+END//
+
+DROP PROCEDURE IF EXISTS insertTombamento//
 CREATE PROCEDURE insertTombamento(v_id_arvore INT, v_motivo VARCHAR(1000), v_decreto VARCHAR(20))
 BEGIN
 	DECLARE real_id_arvore INT;
@@ -99,4 +105,16 @@ BEGIN
 	ELSE
 		INSERT INTO Tombamento(id_arvore, motivo, decreto) VALUES (v_id_arvore, v_motivo, v_decreto);
     END IF;
+END//
+
+DROP PROCEDURE IF EXISTS updateTombamento//
+CREATE PROCEDURE updateTombamento (v_id_arvore INT, v_motivo VARCHAR(1000), v_decreto VARCHAR(20))
+BEGIN
+	DECLARE real_id_arvore INT;
+    SELECT id_arvore INTO real_id_arvore FROM Arvore WHERE id_arvore = v_id_arvore;
+    IF(real_id_arvore IS NOT NULL) THEN
+		UPDATE Tombamento SET motivo = v_motivo, decreto = v_decreto WHERE id_arvore = v_id_arvore;
+	ELSE
+		SELECT 'Árvore não cadastrada' AS erro;
+	END IF;
 END//

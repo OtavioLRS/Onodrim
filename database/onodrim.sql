@@ -22,7 +22,7 @@ CREATE TABLE Tipo (
     checado INT(1) NOT NULL,
     data_checagem DATE,
     CONSTRAINT pk_tipo PRIMARY KEY (id_tipo),
-    CONSTRAINT fk_usuario FOREIGN KEY (usuario) REFERENCES Usuario(email)
+    CONSTRAINT fk_usuario FOREIGN KEY (usuario) REFERENCES Usuario(email) ON UPDATE CASCADE
 );
 
 CREATE TABLE Localizacao (
@@ -46,15 +46,15 @@ CREATE TABLE Arvore (
     data_cadastro DATE NOT NULL,
     fotos VARCHAR(1000),
     CONSTRAINT pk_arvore PRIMARY KEY (id_arvore),
-    CONSTRAINT fk_tipo FOREIGN KEY (id_tipo) REFERENCES Tipo (id_tipo),
-    CONSTRAINT fk_localizacao FOREIGN KEY (latitude, longitude) REFERENCES Localizacao (latitude, longitude)
+    CONSTRAINT fk_tipo FOREIGN KEY (id_tipo) REFERENCES Tipo (id_tipo) ON UPDATE CASCADE,
+    CONSTRAINT fk_localizacao FOREIGN KEY (latitude, longitude) REFERENCES Localizacao (latitude, longitude) ON UPDATE CASCADE
 );
 
 CREATE TABLE Tombamento (
 	id_arvore INT NOT NULL,
 	motivo VARCHAR(1000),
     decreto VARCHAR(20),
-    CONSTRAINT fk_arvore FOREIGN KEY (id_arvore) REFERENCES Arvore (id_arvore)
+    CONSTRAINT fk_arvore FOREIGN KEY (id_arvore) REFERENCES Arvore (id_arvore) ON UPDATE CASCADE
 );
 
 INSERT INTO Usuario(email, nome, senha, grau_permissao) VALUES ('otavio.leite@unesp.br', 'Otávio Leite dos Santos', MD5('otavio123'), 3);
