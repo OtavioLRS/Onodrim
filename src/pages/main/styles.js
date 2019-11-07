@@ -43,6 +43,10 @@ const styles = StyleSheet.create({
     fontSize: 12,
     marginTop: 5,
   },
+
+  sidebar: {
+    width: '100%'
+  }
 });
 
 export default styles;

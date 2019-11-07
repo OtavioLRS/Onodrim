@@ -22,7 +22,7 @@ routes.get('/users', function (req, res) {
 
 routes.post('/signup', (req, res) => {
     connection.getConnection(function (err, connection) {
-        connection.query(`CALL insertUser('${req.body.nome}', '${req.body.email}', '${req.body.senha}', 1);`, function (error, results, fields) {
+        connection.query(`CALL insertUser('${req.body.nome}', '${req.body.email}', '${req.body.senha}', 1);`, (error, results, fields) => {
             return res.json(results);
         });
     });
@@ -38,7 +38,15 @@ routes.post('/signin', (req, res) => {
 
 routes.post('/sugerir', (req, res) => {
     connection.getConnection(function (err, connection) {
-        connection.query(``, (error, results, fields) => {
+        connection.query(`CALL insertTipo(${req.body.nome_cientifico}, ${req.body.nome_popular}, ${req.body.fruto}, ${req.body.utilidade}, ${req.body.usuario});`, (error, results, fields) => {
+            return res.json(results);
+        });
+    });
+});
+
+routes.post('/checar', (req, res) => {
+    connection.getConnection(function (err, connection) {
+        connection.query(`CALL checaTipo(${req.body.nome_cientifico}, ${req.body.checado});`, (error, results, fields) => {
             return res.json(results);
         });
     });
@@ -46,7 +54,8 @@ routes.post('/sugerir', (req, res) => {
 
 routes.post('/arvore', (req, res) => {
     connection.getConnection(function (err, connection) {
-        connection.query(``, (error, results, fields) => {
+        connection.query(`CALL insertLocalizacao(${req.body.latitude}, ${req.body.longitude}, ${req.body.cep}, ${req.body.rua}, ${req.body.bairro}, ${req.body.cidade});
+                          CALL insertArvore(${req.body.tipo}, ${req.body.altura}, ${req.body.largura}, ${req.body.ano_plantio}, ${req.body.fotos});`, (error, results, fields) => {
             return res.json(results);
         });
     });

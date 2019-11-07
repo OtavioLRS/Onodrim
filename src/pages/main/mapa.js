@@ -30,8 +30,8 @@ export default class Mapa extends Component {
       { // propriedades
         useSignificantChanges: true,
         enableHighAccuracy: true, 
-        timeout: 60e3, 
-        maximumAge: 10e3
+        timeout: 20000, 
+        maximumAge: 10000
       }
     );
   }
@@ -50,7 +50,7 @@ export default class Mapa extends Component {
           showsPointsOfInterest={false}
           showBuildings={false}
           showsUserLocation={true}
-          // showsMyLocationButton={true}
+          showsMyLocationButton={true}
           // onPress={this.findPlace}
         >
         </MapView>
