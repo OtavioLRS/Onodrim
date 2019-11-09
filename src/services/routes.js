@@ -1,6 +1,7 @@
 const express = require('express');
-const bodyParser = require('body-parser');
 const mysql = require('mysql');
+const multer = require('multer');
+const multerConfig = require('./config/multer');
 
 const routes = express.Router();
 
@@ -38,7 +39,7 @@ routes.post('/signin', (req, res) => {
 
 routes.post('/sugerir', (req, res) => {
     connection.getConnection(function (err, connection) {
-        connection.query(`CALL insertTipo(${req.body.nome_cientifico}, ${req.body.nome_popular}, ${req.body.fruto}, ${req.body.utilidade}, ${req.body.usuario});`, (error, results, fields) => {
+        connection.query(`CALL insertTipo('${req.body.nome_cientifico}', '${req.body.nome_popular}', '${req.body.fruto}', '${req.body.utilidade}', '${req.body.usuario}');`, (error, results, fields) => {
             return res.json(results);
         });
     });
@@ -46,25 +47,18 @@ routes.post('/sugerir', (req, res) => {
 
 routes.post('/checar', (req, res) => {
     connection.getConnection(function (err, connection) {
-        connection.query(`CALL checaTipo(${req.body.nome_cientifico}, ${req.body.checado});`, (error, results, fields) => {
+        connection.query(`CALL checaTipo('${req.body.nome_cientifico}', ${req.body.checado});`, (error, results, fields) => {
             return res.json(results);
         });
     });
 });
 
-routes.post('/arvore', (req, res) => {
+routes.post('/arvore', multer(multerConfig).single('fotos'), (req, res) => {
     connection.getConnection(function (err, connection) {
-        connection.query(`CALL insertLocalizacao(${req.body.latitude}, ${req.body.longitude}, ${req.body.cep}, ${req.body.rua}, ${req.body.bairro}, ${req.body.cidade});
-                          CALL insertArvore(${req.body.tipo}, ${req.body.altura}, ${req.body.largura}, ${req.body.ano_plantio}, ${req.body.fotos});`, (error, results, fields) => {
+        connection.query(`CALL insertArvore(${ req.body.tipo }, ${ req.body.latitude }, ${ req.body.longitude }, ${ req.body.cep }, '${req.body.rua}', '${req.body.bairro}', '${req.body.cidade}', ${ req.body.altura }, ${ req.body.largura }, '${req.body.data_plantio}', '${req.file.filename}');`, (error, results, fields) => {
             return res.json(results);
         });
     });
 });
-
-
-
-
-
-
 
 module.exports = routes;

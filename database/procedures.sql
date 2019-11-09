@@ -29,7 +29,7 @@ END//
 DROP PROCEDURE if exists insertTipo//
 CREATE PROCEDURE insertTipo(v_nome_cientifico VARCHAR(100), v_nome_popular VARCHAR(100), v_fruto VARCHAR(100), v_utilidade VARCHAR(1000), v_usuario VARCHAR(100))
 BEGIN
-	DECLARE real_nome_cientifico VARCHAR(100);
+  DECLARE real_nome_cientifico VARCHAR(100);
   SELECT nome_cientifico INTO real_nome_cientifico FROM Tipo WHERE nome_cientifico = v_nome_cientifico;
 	IF (real_nome_cientifico IS NULL) THEN
 			INSERT INTO Tipo(nome_cientifico, nome_popular, fruto, utilidade, usuario, data_sugestao, checado) 
@@ -37,38 +37,26 @@ BEGIN
 		ELSE
 			SELECT 'Esta espécie já foi cadastrada!' AS erro;
         END IF;
-    END IF;
 END//
 
 DROP PROCEDURE IF EXISTS checaTipo//
 CREATE PROCEDURE checaTipo(v_nome_cientifico VARCHAR(100), v_checado INT(1))
 BEGIN
-  IF(v_checado = 0) THEN
-		DELETE FROM Tipo WHERE nome_cientifico = v_nome_cientifico;
-	ELSE IF(v_checado = 2) THEN
-			UPDATE Tipo SET checado = 2, data_checagem = current_date() 
-            WHERE nome_cientifico = v_nome_cientifico;
-		END IF;
-  END IF;
-END//
-
-DROP PROCEDURE IF EXISTS insertLocalizacao//
-CREATE PROCEDURE insertLocalizacao(v_latitude FLOAT, v_longitude FLOAT, v_cep INT(8), v_rua VARCHAR(100), v_bairro VARCHAR(100), v_cidade VARCHAR(100))
-BEGIN
-	DECLARE real_latitude, real_longitude FLOAT;
-  SELECT latitude, longitude INTO real_latitude, real_longitude FROM Localizacao WHERE latitude = v_latitude AND longitude = v_longitude;
-  IF(real_latitude IS NULL AND real_longitude IS NULL) THEN
-		INSERT INTO Localizacao (latitude, longitude, cep, rua, bairro, cidade) VALUES (v_latitude, v_longitude, v_cep, v_rua, v_bairro, v_cidade);
-	ELSE IF (real_latitude IS NOT NULL) THEN
-			SELECT 'Já existe uma árvore cadastrada neste local!' AS erro;
-		END IF;
-	END IF;
+  CASE v_checado 
+   WHEN 0 THEN DELETE FROM Tipo WHERE nome_cientifico = v_nome_cientifico;
+   WHEN 2 THEN UPDATE Tipo SET checado = 2, data_checagem = current_date() 
+      WHERE nome_cientifico = v_nome_cientifico;
+  END CASE;
 END//
 
 DROP PROCEDURE if exists insertArvore//
-CREATE PROCEDURE insertArvore(v_id_tipo INT, v_altura FLOAT, v_largura FLOAT, v_ano_plantio DATE, v_fotos VARCHAR(1000))
+CREATE PROCEDURE insertArvore(v_id_tipo INT, v_latitude FLOAT, v_longitude FLOAT, v_cep INT(8), v_rua VARCHAR(100), v_bairro VARCHAR(100), v_cidade VARCHAR(100), v_altura FLOAT, v_largura FLOAT, v_data_plantio VARCHAR(10), v_fotos VARCHAR(1000))
 BEGIN
-	INSERT INTO Arvore(id_tipo, latitude, longitude, altura, largura, ano_plantio, data_cadastro, fotos) VALUES (v_id_tipo, v_latitude, v_longitude, v_altura, v_largura, v_ano_plantio, current_date(), v_fotos);
+	DECLARE EXIT HANDLER FOR SQLSTATE '23000' BEGIN
+		SELECT 'Já existe uma árvore cadastrada neste local!' AS erro;
+    END;
+    INSERT INTO Localizacao(latitude, longitude, cep, rua, bairro, cidade) VALUES (v_latitude, v_longitude, v_cep, v_rua, v_bairro, v_cidade);
+	INSERT INTO Arvore(id_tipo, latitude, longitude, altura, largura, data_plantio, data_cadastro, fotos) VALUES (v_id_tipo, v_latitude, v_longitude, v_altura, v_largura, v_data_plantio, current_date(), v_fotos);
 END//
 
 DROP PROCEDURE IF EXISTS updateArvore//

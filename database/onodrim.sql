@@ -1,7 +1,7 @@
--- CREATE DATABASE Onodrim;
+CREATE DATABASE Onodrim;
 -- DROP DATABASE Onodrim;
 
--- USE Onodrim;
+USE Onodrim;
 
 CREATE TABLE Usuario (
     email VARCHAR(100) NOT NULL,
@@ -22,7 +22,7 @@ CREATE TABLE Tipo (
     checado INT(1) NOT NULL,
     data_checagem DATE,
     CONSTRAINT pk_tipo PRIMARY KEY (id_tipo),
-    CONSTRAINT fk_usuario FOREIGN KEY (usuario) REFERENCES Usuario(email) ON UPDATE CASCADE
+    CONSTRAINT fk_usuario FOREIGN KEY (usuario) REFERENCES Usuario(email)
 );
 
 CREATE TABLE Localizacao (
@@ -42,12 +42,12 @@ CREATE TABLE Arvore (
     longitude FLOAT NOT NULL,
     altura FLOAT,
     largura FLOAT,
-    ano_plantio DATE,
+    data_plantio VARCHAR(10),
     data_cadastro DATE NOT NULL,
     fotos VARCHAR(1000),
     CONSTRAINT pk_arvore PRIMARY KEY (id_arvore),
     CONSTRAINT fk_tipo FOREIGN KEY (id_tipo) REFERENCES Tipo (id_tipo) ON UPDATE CASCADE,
-    CONSTRAINT fk_localizacao FOREIGN KEY (latitude, longitude) REFERENCES Localizacao (latitude, longitude) ON UPDATE CASCADE
+    CONSTRAINT fk_localizacao FOREIGN KEY (latitude, longitude) REFERENCES Localizacao (latitude, longitude) ON DELETE CASCADE
 );
 
 CREATE TABLE Tombamento (
