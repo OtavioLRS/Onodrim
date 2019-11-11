@@ -15,8 +15,6 @@ import {
   SignUpLinkText,
 } from './styles';
 
-
-
 export default class SignIn extends Component {
   static navigationOptions = {
     header: null,
@@ -84,7 +82,7 @@ export default class SignIn extends Component {
     const resetAction = StackActions.reset({
       index: 0,
       actions: [
-        NavigationActions.navigate({ routeName: 'Main' }),
+        NavigationActions.navigate({ routeName: 'Mapa' }),
       ],
     });
     this.props.navigation.dispatch(resetAction);

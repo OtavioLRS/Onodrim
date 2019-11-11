@@ -1,22 +1,42 @@
 import React, { Component } from 'react';
-import { View } from 'react-native';
+import PropTypes from 'prop-types';
+import { View, TouchableOpacity, Text } from 'react-native';
 import MapView from 'react-native-maps';
 import Geolocation from '@react-native-community/geolocation'
+import { StackActions, NavigationActions } from 'react-navigation';
 
 import styles from './styles';
 
 export default class Mapa extends Component {
+  static navigationOptions = {
+    header: null,
+  };
+
+  static propTypes = {
+    navigation: PropTypes.shape({
+      navigate: PropTypes.func,
+      dispatch: PropTypes.func,
+    }).isRequired,
+  };
+
   state = {
     region: null
   };
 
-  componentWillUnmount() {
-    Geolocation.clearWatch(this.watchID);
-  }
+  handleMapPress = () => {
+    const resetAction = StackActions.reset({
+      index: 0,
+      actions: [
+        NavigationActions.navigate({ routeName: 'Camera' }),
+      ],
+    });
+    this.props.navigation.dispatch(resetAction);
+  };
 
   async componentDidMount() {
+    await Geolocation.clearWatch(this.watchID);
     await Geolocation.watchPosition(
-      ({coords}) => { // sucesso
+      ({ coords }) => { // sucesso
         this.setState({
           region: {
             latitude: coords.latitude,
@@ -26,41 +46,41 @@ export default class Mapa extends Component {
           }
         });
       },
-      () => {}, // erro
+      () => { }, // erro
       { // propriedades
         useSignificantChanges: true,
-        enableHighAccuracy: true, 
-        timeout: 20000, 
+        enableHighAccuracy: true,
+        timeout: 20000,
         maximumAge: 10000
-      }
-    );
+      });
   }
-  
+
   render() {
     const { region } = this.state;
 
     return (
-      <View style={styles.container}>
-        <MapView
-          initialRegion={region}
-          style={styles.mapView}
-          rotateEnabled={false}
-          // scrollEnabled={false}
-          // zoomEnabled={false}
-          showsPointsOfInterest={false}
-          showBuildings={false}
-          showsUserLocation={true}
-          showsMyLocationButton={true}
-          // onPress={this.findPlace}
-        >
-        </MapView>
-      </View>
+      <MapView
+        initialRegion={region}
+        style={styles.mapView}
+        rotateEnabled={false}
+        // scrollEnabled={false}
+        // zoomEnabled={false}
+        showsPointsOfInterest={false}
+        showBuildings={false}
+        showsUserLocation={true}
+        showsMyLocationButton={true}
+        onPress={this.handleMapPress}
+      >
+      </MapView>
     );
   }
 }
 
 
-  {/* <ScrollView
+
+
+
+/* <ScrollView
     style={styles.placesContainer}
     horizontal
     pagingEnabled
@@ -88,4 +108,4 @@ export default class Mapa extends Component {
         <Text style={styles.description}>{place.description}</Text>
       </View>
     ))}
-  </ScrollView> */}
+  </ScrollView> */
