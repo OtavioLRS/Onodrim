@@ -7,13 +7,10 @@ import com.facebook.react.PackageList;
 import com.facebook.hermes.reactexecutor.HermesExecutorFactory;
 import com.facebook.react.bridge.JavaScriptExecutorFactory;
 import com.facebook.react.ReactApplication;
-import com.reactnativecommunity.geolocation.GeolocationPackage;
-import com.airbnb.android.react.maps.MapsPackage;
 // import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.soloader.SoLoader;
-import org.reactnative.camera.RNCameraPackage;
 
 import java.util.List;
 

@@ -1,22 +1,15 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { View, TouchableOpacity, Text } from 'react-native';
+import { StatusBar, View, TouchableOpacity, Text } from 'react-native';
 import MapView from 'react-native-maps';
 import Geolocation from '@react-native-community/geolocation'
 import { StackActions, NavigationActions } from 'react-navigation';
 
 import styles from './styles';
+import { Container } from '../signIn/styles';
 
 export default class Mapa extends Component {
   static navigationOptions = {
     header: null,
-  };
-
-  static propTypes = {
-    navigation: PropTypes.shape({
-      navigate: PropTypes.func,
-      dispatch: PropTypes.func,
-    }).isRequired,
   };
 
   state = {
@@ -59,7 +52,10 @@ export default class Mapa extends Component {
     const { region } = this.state;
 
     return (
-      <MapView
+      <Container>
+        <StatusBar hidden/>
+
+        <MapView
         initialRegion={region}
         style={styles.mapView}
         rotateEnabled={false}
@@ -70,8 +66,9 @@ export default class Mapa extends Component {
         showsUserLocation={true}
         showsMyLocationButton={true}
         onPress={this.handleMapPress}
-      >
-      </MapView>
+        >
+        </MapView>
+      </Container>
     );
   }
 }
