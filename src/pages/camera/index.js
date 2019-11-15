@@ -1,10 +1,10 @@
 import { RNCamera } from 'react-native-camera'
-import {StatusBar, Text, View, TouchableHighlight, StyleSheet, Dimensions, Image } from 'react-native';
+import { StatusBar, Text, View, TouchableHighlight, Image } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import React, { Component } from 'react';
 import { StackActions, NavigationActions } from 'react-navigation';
 
-
+import styles from './styles';
 export default class Camera extends Component {
   static navigationOptions = {
     header: null
@@ -33,7 +33,13 @@ export default class Camera extends Component {
   }
 
   takePhoto = async () => {
-    const options = { quality: 1.0, base64: true };
+    const options = { 
+      quality: 0.5, 
+      base64: true, 
+      orientation: RNCamera.Constants.Orientation.auto,
+      fixOrientation: true,
+      pauseAfterCapture: true
+    };
     const data = await this.camera.takePictureAsync(options);
     this.setState({ path: data.uri });
   };
@@ -41,24 +47,42 @@ export default class Camera extends Component {
   exibirFoto() {
     return(
       <View>
+
         <Image
           source={{ uri: this.state.path }}
           style={styles.preview}
         />
-        <Text
+
+        <TouchableHighlight
           style={styles.ok}
           onPress={() => {
             this.setState({ path: null });
             this.storeData();
             this.navegar('Arvore');
-          }}
-        >OK</Text>
-        <Text
+          }}>
+          <View>
+            <Text style={{
+              color: '#FFF',
+              fontWeight: '600',
+              fontSize: 17,
+            }}>OK</Text>
+          </View>
+        </TouchableHighlight>
+
+        <TouchableHighlight
           style={styles.cancel}
           onPress={() => {
               this.setState({ path: null });
-          }}
-        >Tirar outra foto</Text>
+          }}>
+          <View>
+            <Text style={{
+              color: '#FFF',
+              fontWeight: '600',
+              fontSize: 17,
+            }}>Tirar outra</Text>
+          </View>
+        </TouchableHighlight>
+      
       </View>
     )
   }
@@ -72,13 +96,22 @@ export default class Camera extends Component {
         type={RNCamera.Constants.Type.back}
         style={styles.preview}
       >
-        <Text
+        <TouchableHighlight
           style={styles.cancel}
           onPress={() => {
             this.setState({ path: null });
             this.navegar('Mapa');
           }}
-        >Voltar</Text>
+        >
+          <View>
+            <Text style={{
+              color: '#FFF',
+              fontWeight: '600',
+              fontSize: 17,
+              }}>Voltar</Text>
+          </View>
+        </TouchableHighlight>
+        
         <TouchableHighlight
           style={styles.capture}
           onPress={this.takePhoto.bind(this)}
@@ -93,53 +126,9 @@ export default class Camera extends Component {
   render() {
     return (
       <View style={styles.container}>
+        <StatusBar hidden />
         {this.state.path ? this.exibirFoto() : this.exibirCamera()}
       </View>
     );
   }
 }
-
-
-
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#000',
-  },
-  preview: {
-    flex: 1,
-    justifyContent: 'flex-end',
-    alignItems: 'center',
-    height: Dimensions.get('window').height,
-    width: Dimensions.get('window').width
-  },
-  capture: {
-    width: 70,
-    height: 70,
-    borderRadius: 35,
-    borderWidth: 5,
-    borderColor: '#FFF',
-    marginBottom: 15,
-  },
-  cancel: {
-    position: 'absolute',
-    right: 20,
-    top: 20,
-    backgroundColor: 'transparent',
-    color: '#FFF',
-    fontWeight: '600',
-    fontSize: 17,
-  },
-  ok: {
-    position: 'absolute',
-    left: 20,
-    top: 20,
-    backgroundColor: 'transparent',
-    color: '#FFF',
-    fontWeight: '600',
-    fontSize: 17,
-  }
-});
