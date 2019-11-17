@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-
-import { StatusBar } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
+import { StatusBar, ActivityIndicator, View } from 'react-native';
 import { StackActions, NavigationActions } from 'react-navigation';
 
 import {
@@ -13,24 +12,19 @@ import {
   SignInLinkText,
   SignUpLink,
   SignUpLinkText,
+  styles
 } from './styles';
 
 export default class SignIn extends Component {
   static navigationOptions = {
     header: null,
   };
-  
-  static propTypes = {
-    navigation: PropTypes.shape({
-      navigate: PropTypes.func,
-      dispatch: PropTypes.func,
-    }).isRequired,
-  };
 
   state = {
     email: 'adm',
     senha: 'adm',
     error: '',
+    loading: false,
   };
 
   handleEmailChange = (email) => {
@@ -49,9 +43,9 @@ export default class SignIn extends Component {
     if (this.state.email.length === 0 || this.state.senha.length === 0) {
       this.setState({ error: 'Insira seu e-mail e senha para continuar!' }, () => false);
     } else {
+        this.setState({loading:true});
         await fetch('http://192.168.0.102:3333/signin', {
         // await fetch('http://192.168.43.169:3333/signin', {
-        // await fetch('http://172.16.222.76:3333/signin', {
           method: 'POST',
           headers: {
             Accept: 'application/json',
@@ -64,21 +58,24 @@ export default class SignIn extends Component {
         })
           .then((response) => response.json())
           .then((responseJson) => {
-            if (typeof (responseJson[0][0].erro) !== "undefined")
+            if (typeof (responseJson[0][0].erro) !== "undefined"){
               this.setState({ error: responseJson[0][0].erro }, () => false);
+              this.setState({loading:false});
+            }
             else {
-              this.logIn;
+              AsyncStorage.setItem('usuario', JSON.stringify(responseJson));
+              this.setState({ loading: false });
+              this.logIn();
             }
           })
-          .catch(function (error) {
+          .catch((error) => {
             alert(error);
-            console.log('There has been a problem with your fetch operation: ' + error.message);
             throw error;
           });
     }
   };
 
-  logIn = () => {
+  logIn = async () => {
     const resetAction = StackActions.reset({
       index: 0,
       actions: [
@@ -115,6 +112,12 @@ export default class SignIn extends Component {
         <SignUpLink onPress={this.handleCreateAccountPress}>
           <SignUpLinkText>Cadastrar-se</SignUpLinkText>
         </SignUpLink>
+
+        {this.state.loading &&
+          <View style={styles.loading}>
+            <ActivityIndicator size='large'/>
+          </View>
+        }
       </Container>
     );
   }

@@ -1,5 +1,5 @@
 import { StyleSheet, Dimensions } from 'react-native';
-
+import styled from 'styled-components';
 const { height, width } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
@@ -45,4 +45,11 @@ const styles = StyleSheet.create({
   },
 });
 
-export default styles;
+const Container = styled.View`  
+  flex: 1;
+  alignItems: center;
+  justifyContent: center;
+  backgroundColor: #78D561;
+`;
+
+export {styles, Container};

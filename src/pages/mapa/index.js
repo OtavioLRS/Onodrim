@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import { StatusBar, View, TouchableOpacity, Text } from 'react-native';
+import { StatusBar } from 'react-native';
 import MapView from 'react-native-maps';
 import Geolocation from '@react-native-community/geolocation'
+import AsyncStorage from '@react-native-community/async-storage';
 import { StackActions, NavigationActions } from 'react-navigation';
 
-import styles from './styles';
-import { Container } from '../signIn/styles';
+import { Container, styles } from './styles';
 
 export default class Mapa extends Component {
   static navigationOptions = {
@@ -16,7 +16,13 @@ export default class Mapa extends Component {
     region: null
   };
 
-  handleMapPress = () => {
+  handleMapPress = async (e) => {
+    try {
+      await AsyncStorage.setItem('local', JSON.stringify(e.nativeEvent.coordinate));
+    } catch(e) {
+      alert(e);
+    }
+
     const resetAction = StackActions.reset({
       index: 0,
       actions: [
@@ -56,7 +62,7 @@ export default class Mapa extends Component {
         <StatusBar hidden/>
 
         <MapView
-        initialRegion={region}
+        region={region}
         style={styles.mapView}
         rotateEnabled={false}
         // scrollEnabled={false}

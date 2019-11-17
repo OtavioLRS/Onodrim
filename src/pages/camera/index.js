@@ -38,7 +38,6 @@ export default class Camera extends Component {
       base64: true, 
       orientation: RNCamera.Constants.Orientation.auto,
       fixOrientation: true,
-      pauseAfterCapture: true
     };
     const data = await this.camera.takePictureAsync(options);
     this.setState({ path: data.uri });

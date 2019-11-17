@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import {StyleSheet} from 'react-native';
 
 const Container = styled.View`  
   flex: 1;
@@ -59,4 +60,16 @@ const SignUpLinkText = styled.Text`
   textAlign: center;
 `;
 
-export { Container, Logo, Input, ErrorMessage, SignInLink, SignInLinkText, SignUpLink, SignUpLinkText };
+const styles = StyleSheet.create({
+  loading: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+    alignItems: 'center',
+    justifyContent: 'center',
+  }
+});
+
+export { styles, Container, Logo, Input, ErrorMessage, SignInLink, SignInLinkText, SignUpLink, SignUpLinkText };

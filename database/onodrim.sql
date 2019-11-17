@@ -26,8 +26,8 @@ CREATE TABLE Tipo (
 );
 
 CREATE TABLE Localizacao (
-	latitude FLOAT NOT NULL,
-    longitude FLOAT NOT NULL,
+	latitude DOUBLE(18,15) NOT NULL,
+    longitude DOUBLE(18,15) NOT NULL,
     cep INT(8),
     rua VARCHAR(100),
     bairro VARCHAR(100),
@@ -38,8 +38,8 @@ CREATE TABLE Localizacao (
 CREATE TABLE Arvore (
 	id_arvore INT AUTO_INCREMENT NOT NULL,
     id_tipo INT NOT NULL,
-    latitude FLOAT NOT NULL,
-    longitude FLOAT NOT NULL,
+    latitude DOUBLE(18,15) NOT NULL,
+    longitude DOUBLE(18,15) NOT NULL,
     altura FLOAT,
     largura FLOAT,
     data_plantio VARCHAR(10),

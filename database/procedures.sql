@@ -50,7 +50,7 @@ BEGIN
 END//
 
 DROP PROCEDURE if exists insertArvore//
-CREATE PROCEDURE insertArvore(v_id_tipo INT, v_latitude FLOAT, v_longitude FLOAT, v_cep INT(8), v_rua VARCHAR(100), v_bairro VARCHAR(100), v_cidade VARCHAR(100), v_altura FLOAT, v_largura FLOAT, v_data_plantio VARCHAR(10), v_fotos VARCHAR(1000))
+CREATE PROCEDURE insertArvore(v_id_tipo INT, v_latitude DOUBLE(18,15), v_longitude DOUBLE(18,15), v_cep INT(8), v_rua VARCHAR(100), v_bairro VARCHAR(100), v_cidade VARCHAR(100), v_altura FLOAT, v_largura FLOAT, v_data_plantio VARCHAR(10), v_fotos VARCHAR(1000))
 BEGIN
 	DECLARE EXIT HANDLER FOR SQLSTATE '23000' BEGIN
 		SELECT 'Já existe uma árvore cadastrada neste local!' AS erro;

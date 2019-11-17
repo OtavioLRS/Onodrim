@@ -60,7 +60,6 @@ export default class SignUp extends Component {
     } else {
         await fetch('http://192.168.0.102:3333/signup', {
         // await fetch('http://192.168.43.169:3333/signup', {
-        // await fetch('http://172.16.222.76:3333/signup', {
           method: 'POST',
           headers: { 
             Accept: 'application/json',

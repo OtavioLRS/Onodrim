@@ -8,12 +8,11 @@ import { requestLocationPermission } from './services/locationPermission';
 const AppContainer = createAppContainer(Routes);
 
 export default class App extends Component {
-  
-  async componentDidMount() {
-    await requestLocationPermission();
+  componentDidMount() {
+    requestLocationPermission();
   }
-
-  render(){
+  
+  render() {
     return(
       <AppContainer />
     )
