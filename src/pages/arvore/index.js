@@ -23,9 +23,10 @@ export default class Arvore extends Component {
     latitude: '',
     longitude: '', 
     itensEspecies: [],
-    loading: true,
     error: '',
     success: '',
+    loading: true,
+    editable: false
   }
 
   async componentDidMount() {
@@ -38,6 +39,7 @@ export default class Arvore extends Component {
 
     await fetch('http://192.168.0.102:3333/tipos', {
     // await fetch('http://192.168.43.169:3333/tipos', {
+    // await fetch('http://186.217.108.38:3333/tipos', {
       method: 'GET',
       headers: {
         Accept: 'application/json',
@@ -50,7 +52,7 @@ export default class Arvore extends Component {
         response.forEach(element => {
           this.state.itensEspecies[x++] = element;
         });
-        this.setState({ loading: false })
+        this.setState({ loading: false, editable: true })
       })
   }
 
@@ -106,13 +108,17 @@ export default class Arvore extends Component {
   handleCEPChange = (CEP) => {
     const { length } = CEP;
     if(length == 8) {
-      cep(CEP).then((value) => {
+      this.setState({loading: true});
+      cep(CEP).then((value) =>
         this.setState({ 
           cidade: value.city,
           bairro: value.neighborhood,
           rua: value.street,
-        })
+        }))
+      .catch(e => {
+        alert('CEP não encontrado!');
       });
+      this.setState({loading:false});
     } else if(length > 8) 
       CEP = CEP.substring(0, length - 1);
     this.setState({ cep: CEP });
@@ -150,6 +156,7 @@ export default class Arvore extends Component {
       return;
     }
     else {
+      this.setState({ loading: true, editable: false });
       const body = {
         id_tipo: '',
         latitude: '',
@@ -180,7 +187,8 @@ export default class Arvore extends Component {
       body.data_plantio = this.state.data_plantio;
 
       await fetch('http://192.168.0.102:3333/arvore', {
-        // await fetch('http://192.168.43.169:3333/tipos', {
+        // await fetch('http://192.168.43.169:3333/arvore', {
+        // await fetch('http://186.217.108.38:3333/arvore', {
         method: 'POST',
         headers: {
           'Content-Type': 'multipart/form-data',
@@ -190,12 +198,12 @@ export default class Arvore extends Component {
         .then(response => response.json())
         .then(response => {
           if (Array.isArray(response)) {
-            this.setState({ error: response[0][0].erro }, () => false);
-            setTimeout(this.navegar('Mapa'), 3500);
+            this.setState({ error: response[0][0].erro, loading: false });
+            setTimeout(() => {this.navegar('Mapa')}, 3500);
           }
           else {
-            this.setState({ success: 'Árvore cadastrada com sucesso!', error: '' });
-            setTimeout(this.navegar('Mapa'), 3500);
+            this.setState({ success: 'Árvore cadastrada com sucesso!', error: '', loading: false });
+            setTimeout(() => {this.navegar('Mapa')}, 3500);
           }
         })
         .catch(e => {
@@ -220,6 +228,7 @@ export default class Arvore extends Component {
           onValueChange={(index, value) => {
             this.setState({ id_tipo: index });
           }}
+          editable={this.state.editable}
         >
           <Picker.Item label="Espécie (CAMPO OBRIGATÓRIO)" value='0'/>
           {listaEspecies}
@@ -232,6 +241,7 @@ export default class Arvore extends Component {
           autoCapitalize="none"
           autoCorrect={false}
           keyboardType={'numeric'}
+          editable={this.state.editable}
         />
 
         <Input
@@ -241,6 +251,7 @@ export default class Arvore extends Component {
           autoCapitalize="none"
           autoCorrect={false}
           keyboardType={'numeric'}
+          editable={this.state.editable}
         />
 
         <Input
@@ -250,6 +261,7 @@ export default class Arvore extends Component {
           autoCapitalize="none"
           autoCorrect={false}
           keyboardType={'numeric'}
+          editable={this.state.editable}
         />
 
         <Input
@@ -259,30 +271,34 @@ export default class Arvore extends Component {
           autoCapitalize="none"
           autoCorrect={false}
           keyboardType={'numeric'}
+          editable={this.state.editable}
         />
         
         <Input
           placeholder="Cidade"
           value={this.state.cidade}
           onChangeText={this.handleCidadeChange}
-          autoCapitalize="none"
+          autoCapitalize="words"
           autoCorrect={false}
+          editable={this.state.editable}
         />
 
         <Input
           placeholder="Bairro"
           value={this.state.bairro}
           onChangeText={this.handleBairroChange}
-          autoCapitalize="none"
+          autoCapitalize="words"
           autoCorrect={false}
+          editable={this.state.editable}
         />
 
         <Input
           placeholder="Rua"
           value={this.state.rua}
           onChangeText={this.handleRuaChange}
-          autoCapitalize="none"
+          autoCapitalize="words"
           autoCorrect={false}
+          editable={this.state.editable}
         />
 
         {this.state.success.length !== 0 && <SuccessMessage>{this.state.success}</SuccessMessage>}

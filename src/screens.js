@@ -11,8 +11,8 @@ const Routes = createStackNavigator({
   SignIn,
   SignUp,
   Mapa,
-  Arvore,
   Camera,
+  Arvore,
   Especie,
 });
 

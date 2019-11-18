@@ -46,6 +46,7 @@ export default class SignIn extends Component {
         this.setState({loading:true});
         await fetch('http://192.168.0.102:3333/signin', {
         // await fetch('http://192.168.43.169:3333/signin', {
+      // await fetch('http://186.217.108.38:3333/signin', {
           method: 'POST',
           headers: {
             Accept: 'application/json',
@@ -63,7 +64,8 @@ export default class SignIn extends Component {
               this.setState({loading:false});
             }
             else {
-              AsyncStorage.setItem('usuario', JSON.stringify(responseJson));
+              AsyncStorage.setItem('usuario', JSON.stringify(responseJson[0][0]));
+              console.log(responseJson);
               this.setState({ loading: false });
               this.logIn();
             }

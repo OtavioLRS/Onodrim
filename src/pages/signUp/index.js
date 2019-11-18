@@ -58,8 +58,8 @@ export default class SignUp extends Component {
     if (this.state.nome.length === 0 || this.state.email.length === 0 || this.state.senha.length === 0) {
       this.setState({ error: 'Preencha todos os campos para continuar!' }, () => false);
     } else {
-        await fetch('http://192.168.0.102:3333/signup', {
-        // await fetch('http://192.168.43.169:3333/signup', {
+        // await fetch('http://192.168.0.102:3333/signup', {
+        await fetch('http://192.168.43.169:3333/signup', {
           method: 'POST',
           headers: { 
             Accept: 'application/json',

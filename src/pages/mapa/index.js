@@ -62,6 +62,12 @@ export default class Mapa extends Component {
         <StatusBar hidden/>
 
         <MapView
+        initialRegion={{
+          latitude: -22.132083070946305,
+          longitude: -51.391217261552820,
+          latitudeDelta: 0.0001,
+          longitudeDelta: 0.0001
+        }}
         region={region}
         style={styles.mapView}
         rotateEnabled={false}
@@ -72,6 +78,8 @@ export default class Mapa extends Component {
         showsUserLocation={true}
         showsMyLocationButton={true}
         onPress={this.handleMapPress}
+        minZoomLevel={17}
+        maxZoomLevel={30}
         >
         </MapView>
       </Container>
