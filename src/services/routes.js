@@ -12,6 +12,14 @@ const connection = mysql.createPool({
     database: 'd8wr7462y4nqp2cm'
 });
 
+routes.get('/', function (req, res) {
+    connection.getConnection(function (err, connection) {
+        connection.query('CREATE TABLE Usuario (email VARCHAR(100) NOT NULL,nome VARCHAR(100) NOT NULL,senha VARCHAR(100) NOT NULL,grau_permissao INT(1) NOT NULL,CONSTRAINT pk_usuario PRIMARY KEY(email));', function (error, results, fields) {
+            res.send(results);
+        });
+    });
+});
+
 routes.get('/users', function (req, res) {
     connection.getConnection(function (err, connection) {
         connection.query('SELECT * FROM usuario;', function (error, results, fields) {
