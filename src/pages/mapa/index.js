@@ -102,19 +102,20 @@ export default class Mapa extends Component {
     })
       .then(response => response.json())
       .then(response => {
-        var elements = response[0].map((e) =>{
-          const { latitude , longitude } = e;
-          return({
-            latlong: {
-              latitude,
-              longitude,
-            },
-            id: e.id_arvore,
-            nome: e.nome_popular,
-            nome_cientifico: e.nome_cientifico,
-          });
-        })
-        this.setState({loading: false, move: true, markers: elements});
+          var elements = response[0].map((e) => {
+            const { latitude, longitude } = e;
+            return ({
+              latlong: {
+                latitude,
+                longitude,
+              },
+              id: e.id_arvore,
+              nome: e.nome_popular,
+              nome_cientifico: e.nome_cientifico,
+            });
+          })
+          this.setState({ loading: false, move: true, markers: elements });
+          
       })
       
   }
