@@ -33,7 +33,6 @@ export default class Especie extends Component {
 
   async componentDidMount() {
     const usuario = JSON.parse(await AsyncStorage.getItem('usuario'));
-    console.log(usuario);
     this.setState({usuario: usuario.email});
   }
 

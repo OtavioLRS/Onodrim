@@ -61,6 +61,14 @@ routes.post('/arvore', multer(multerConfig).single('fotos'), (req, res) => {
     });
 });
 
+routes.get('/arvore', (req, res) => {
+    connection.getConnection(function (err, connection) {
+        connection.query(`CALL getArvores();`, (error, results, fields) => {
+            return res.json(results);
+        });
+    })
+})
+
 routes.get('/tipos', (req, res) => {
     connection.getConnection(function (err, connection) {
         connection.query(`SELECT * FROM Tipo WHERE checado = 2;`, (error, results, fields) => {

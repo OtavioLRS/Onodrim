@@ -1,5 +1,6 @@
 DELIMITER //
-
+select * from Arvore//
+select * from Tipo//
 DROP PROCEDURE if exists insertUser//
 CREATE PROCEDURE insertUser(v_nome VARCHAR(100), v_email VARCHAR(100), v_senha VARCHAR(100), permissao INT)
 BEGIN
@@ -63,6 +64,18 @@ DROP PROCEDURE IF EXISTS updateArvore//
 CREATE PROCEDURE updateArvore(v_id_arvore INT, v_id_tipo INT, v_altura FLOAT, v_largura FLOAT, v_ano_plantio DATE, v_fotos VARCHAR(1000))
 BEGIN
 	UPDATE Arvore SET id_tipo = v_id_tipo, altura = v_altura, largura = v_largura, ano_plantio = v_ano_plantio, fotos = v_fotos WHERE id_arvore = v_id_arvore;
+END//
+
+DROP PROCEDURE IF EXISTS getArvores//
+CREATE PROCEDURE getArvores()
+BEGIN
+	SELECT id_arvore, id_tipo, nome_cientifico, nome_popular, Arvore.latitude, Arvore.longitude, 
+		altura, largura, data_plantio, data_cadastro, 
+		fotos, cep, rua, bairro, cidade 
+    FROM Arvore INNER JOIN Localizacao INNER JOIN Tipo 
+    ON Arvore.latitude=Localizacao.latitude 
+    AND Arvore.longitude=Localizacao.longitude
+    AND Arvore.id_tipo = Tipo.id_tipo;
 END//
 
 DROP PROCEDURE IF EXISTS insertTombamento//

@@ -1,6 +1,6 @@
 import { StyleSheet, Dimensions } from 'react-native';
 import styled from 'styled-components';
-const { height, width } = Dimensions.get('window');
+const { width } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
   container: {
@@ -8,7 +8,6 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
     alignItems: 'flex-end'
   },
-
   mapView: {
     position: 'absolute',
     top: 0,
@@ -43,6 +42,15 @@ const styles = StyleSheet.create({
     fontSize: 12,
     marginTop: 5,
   },
+  loading: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+    alignItems: 'center',
+    justifyContent: 'center',
+  }
 });
 
 const Container = styled.View`  

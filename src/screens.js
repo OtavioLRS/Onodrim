@@ -8,9 +8,9 @@ import SignIn from './pages/signIn';
 import SignUp from './pages/signUp';
 
 const Routes = createStackNavigator({
+  Mapa,
   SignIn,
   SignUp,
-  Mapa,
   Camera,
   Arvore,
   Especie,

@@ -144,6 +144,7 @@ export default class Arvore extends Component {
       type: 'image/jpg',
       uri: foto,
     });
+
     Object.keys(body).forEach(key => {
       data.append(key, body[key]);
     });
@@ -187,7 +188,7 @@ export default class Arvore extends Component {
       body.data_plantio = this.state.data_plantio;
 
       await fetch('http://192.168.0.102:3333/arvore', {
-        // await fetch('http://192.168.43.169:3333/arvore', {
+      // await fetch('http://192.168.43.169:3333/arvore', {
         // await fetch('http://186.217.108.38:3333/arvore', {
         method: 'POST',
         headers: {
@@ -197,18 +198,15 @@ export default class Arvore extends Component {
       })
         .then(response => response.json())
         .then(response => {
-          if (Array.isArray(response)) {
+          if (Array.isArray(response))
             this.setState({ error: response[0][0].erro, loading: false });
-            setTimeout(() => {this.navegar('Mapa')}, 3500);
-          }
-          else {
+          else
             this.setState({ success: 'Árvore cadastrada com sucesso!', error: '', loading: false });
-            setTimeout(() => {this.navegar('Mapa')}, 3500);
-          }
         })
         .catch(e => {
           alert(e);
         })
+        setTimeout(() => {this.navegar('Mapa')}, 3500);
     }
   }
 
