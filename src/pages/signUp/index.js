@@ -59,7 +59,7 @@ export default class SignUp extends Component {
       this.setState({ error: 'Preencha todos os campos para continuar!' }, () => false);
     } else {
         // await fetch('http://192.168.0.102:3333/signup', {
-        await fetch('http://192.168.43.169:3333/signup', {
+      await fetch('https://onodrim.herokuapp.com/signup', {
           method: 'POST',
           headers: { 
             Accept: 'application/json',

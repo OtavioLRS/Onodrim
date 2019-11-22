@@ -6,18 +6,10 @@ const multerConfig = require('./config/multer');
 const routes = express.Router();
 
 const connection = mysql.createPool({
-    host: 'y2w3wxldca8enczv.cbetxkdyhwsb.us-east-1.rds.amazonaws.com',
-    user: 'gaa9hojovnmdj1i0',
-    password: 'nb4tr83hcqiocbni',
-    database: 'd8wr7462y4nqp2cm'
-});
-
-routes.get('/', function (req, res) {
-    connection.getConnection(function (err, connection) {
-        connection.query(' CREATE TABLE Usuario (email VARCHAR(100) NOT NULL,nome VARCHAR(100) NOT NULL,senha VARCHAR(100) NOT NULL,grau_permissao INT(1) NOT NULL,CONSTRAINT pk_usuario PRIMARY KEY(email));', function (error, results, fields) {
-            res.send(results);
-        });
-    });
+    host: DB_HOST,
+    user: DB_USER,
+    password: DB_PASSWORD,
+    database: DB_DATABASE
 });
 
 routes.get('/users', function (req, res) {

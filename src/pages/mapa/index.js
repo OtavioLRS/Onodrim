@@ -91,7 +91,7 @@ export default class Mapa extends Component {
         timeout: 20000,
         maximumAge: 10000
       });
-    await fetch('http://192.168.0.102:3333/arvore', {
+    await fetch('https://onodrim.herokuapp.com/arvore', {
       // await fetch('http://192.168.43.169:3333/arvore', {
       // await fetch('http://186.217.108.38:3333/arvore', {
       method: 'GET',

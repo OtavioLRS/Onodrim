@@ -66,7 +66,7 @@ export default class Especie extends Component {
         utilidade: this.state.utilidade,
         usuario: this.state.usuario
       }
-      await fetch('http://192.168.0.102:3333/sugerir', {
+      await fetch('https://onodrim.herokuapp.com/sugerir', {
       // await fetch('http://192.168.43.169:3333/sugerir', {
       // await fetch('http://186.217.108.38:3333/sugerir', {
         method: 'POST',

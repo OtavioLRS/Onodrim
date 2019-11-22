@@ -37,7 +37,7 @@ export default class Arvore extends Component {
     const { latitude, longitude } = local;
     this.setState({fotos: foto.path, latitude, longitude});
 
-    await fetch('http://192.168.0.102:3333/tipos', {
+    await fetch('https://onodrim.herokuapp.com/tipos', {
     // await fetch('http://192.168.43.169:3333/tipos', {
     // await fetch('http://186.217.108.38:3333/tipos', {
       method: 'GET',
@@ -187,7 +187,7 @@ export default class Arvore extends Component {
       body.cidade = this.state.cidade;
       body.data_plantio = this.state.data_plantio;
 
-      await fetch('http://192.168.0.102:3333/arvore', {
+      await fetch('https://onodrim.herokuapp.com/arvore', {
       // await fetch('http://192.168.43.169:3333/arvore', {
         // await fetch('http://186.217.108.38:3333/arvore', {
         method: 'POST',

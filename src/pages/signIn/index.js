@@ -45,7 +45,7 @@ export default class SignIn extends Component {
       this.setState({ error: 'Insira seu e-mail e senha para continuar!' }, () => false);
     } else {
         this.setState({loading:true});
-        await fetch('http://192.168.0.102:3333/signin', {
+      await fetch('https://onodrim.herokuapp.com/signin', {
         // await fetch('http://192.168.43.169:3333/signin', {
       // await fetch('http://186.217.108.38:3333/signin', {
           method: 'POST',
