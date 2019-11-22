@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const express = require('express');
 const mysql = require('mysql');
 const multer = require('multer');
@@ -45,6 +47,14 @@ routes.post('/sugerir', (req, res) => {
     });
 });
 
+routes.get('/tipos', (req, res) => {
+    connection.getConnection(function (err, connection) {
+        connection.query(`SELECT * FROM Tipo WHERE checado = 2;`, (error, results, fields) => {
+            return res.json(results);
+        });
+    });
+});
+
 routes.post('/checar', (req, res) => {
     connection.getConnection(function (err, connection) {
         connection.query(`CALL checaTipo('${req.body.nome_cientifico}', ${req.body.checado});`, (error, results, fields) => {
@@ -67,14 +77,6 @@ routes.get('/arvore', (req, res) => {
             return res.json(results);
         });
     })
-})
-
-routes.get('/tipos', (req, res) => {
-    connection.getConnection(function (err, connection) {
-        connection.query(`SELECT * FROM Tipo WHERE checado = 2;`, (error, results, fields) => {
-            return res.json(results);
-        });
-    });
-})
+});
 
 module.exports = routes;

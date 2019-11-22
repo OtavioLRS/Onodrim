@@ -65,7 +65,7 @@ export default class Mapa extends Component {
     const resetAction = StackActions.reset({
       index: 0,
       actions: [
-        NavigationActions.navigate({ routeName: 'Camera' }),
+        NavigationActions.navigate({ routeName: 'Especie' }),
       ],
     });
     this.props.navigation.dispatch(resetAction);
