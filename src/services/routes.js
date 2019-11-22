@@ -14,7 +14,8 @@ const connection = mysql.createPool({
 
 routes.get('/', function (req, res) {
     connection.getConnection(function (err, connection) {
-        connection.query('CREATE TABLE Usuario (email VARCHAR(100) NOT NULL,nome VARCHAR(100) NOT NULL,senha VARCHAR(100) NOT NULL,grau_permissao INT(1) NOT NULL,CONSTRAINT pk_usuario PRIMARY KEY(email));', function (error, results, fields) {
+        connection.query(`SELECT 'ok';`, function (error, results, fields) {
+        // connection.query(' CREATE TABLE Usuario (email VARCHAR(100) NOT NULL,nome VARCHAR(100) NOT NULL,senha VARCHAR(100) NOT NULL,grau_permissao INT(1) NOT NULL,CONSTRAINT pk_usuario PRIMARY KEY(email));', function (error, results, fields) {
             res.send(results);
         });
     });
@@ -61,13 +62,13 @@ routes.post('/checar', (req, res) => {
     });
 });
 
-routes.post('/arvore', multer(multerConfig).single('fotos'), (req, res) => {
-    connection.getConnection(function (err, connection) {
-        connection.query(`CALL insertArvore(${ req.body.id_tipo }, ${ req.body.latitude }, ${ req.body.longitude }, ${ req.body.cep }, '${req.body.rua}', '${req.body.bairro}', '${req.body.cidade}', ${ req.body.altura }, ${ req.body.largura }, '${req.body.data_plantio}', '${req.file.filename}');`, (error, results, fields) => {
-            return res.json(results);
-        });
-    });
-});
+// routes.post('/arvore', multer(multerConfig).single('fotos'), (req, res) => {
+//     connection.getConnection(function (err, connection) {
+//         connection.query(`CALL insertArvore(${ req.body.id_tipo }, ${ req.body.latitude }, ${ req.body.longitude }, ${ req.body.cep }, '${req.body.rua}', '${req.body.bairro}', '${req.body.cidade}', ${ req.body.altura }, ${ req.body.largura }, '${req.body.data_plantio}', '${req.file.filename}');`, (error, results, fields) => {
+//             return res.json(results);
+//         });
+//     });
+// });
 
 routes.get('/arvore', (req, res) => {
     connection.getConnection(function (err, connection) {
