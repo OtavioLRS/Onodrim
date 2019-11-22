@@ -66,17 +66,19 @@ BEGIN
 	UPDATE Arvore SET id_tipo = v_id_tipo, altura = v_altura, largura = v_largura, ano_plantio = v_ano_plantio, fotos = v_fotos WHERE id_arvore = v_id_arvore;
 END//
 
-DROP PROCEDURE IF EXISTS getArvores//
+DROP PROCEDURE IF EXISTS getArvores;
 CREATE PROCEDURE getArvores()
 BEGIN
-	SELECT id_arvore, id_tipo, nome_cientifico, nome_popular, Arvore.latitude, Arvore.longitude, 
+	SELECT id_arvore, Arvore.id_tipo, nome_cientifico, nome_popular, Arvore.latitude, Arvore.longitude, 
 		altura, largura, data_plantio, data_cadastro, 
 		fotos, cep, rua, bairro, cidade 
     FROM Arvore INNER JOIN Localizacao INNER JOIN Tipo 
     ON Arvore.latitude=Localizacao.latitude 
     AND Arvore.longitude=Localizacao.longitude
-    AND Arvore.id_tipo = Tipo.id_tipo;
+    AND Arvore.id_tipo = Tipo.id_tipo
+    ORDER BY Arvore.latitude ASC;
 END//
+call getArvores()//
 
 DROP PROCEDURE IF EXISTS insertTombamento//
 CREATE PROCEDURE insertTombamento(v_id_arvore INT, v_motivo VARCHAR(1000), v_decreto VARCHAR(20))

@@ -6,10 +6,10 @@ const multerConfig = require('./config/multer');
 const routes = express.Router();
 
 const connection = mysql.createPool({
-    host: '127.0.0.1',
-    user: 'root',
-    password: '',
-    database: 'onodrim'
+    host: 'y2w3wxldca8enczv.cbetxkdyhwsb.us-east-1.rds.amazonaws.com',
+    user: 'gaa9hojovnmdj1i0',
+    password: 'nb4tr83hcqiocbni',
+    database: 'd8wr7462y4nqp2cm'
 });
 
 routes.get('/users', function (req, res) {
