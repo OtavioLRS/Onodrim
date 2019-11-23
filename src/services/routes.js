@@ -63,13 +63,13 @@ routes.post('/checar', (req, res) => {
     });
 });
 
-// routes.post('/arvore', multer(multerConfig).single('fotos'), (req, res) => {
-//     connection.getConnection(function (err, connection) {
-//         connection.query(`CALL insertArvore(${ req.body.id_tipo }, ${ req.body.latitude }, ${ req.body.longitude }, ${ req.body.cep }, '${req.body.rua}', '${req.body.bairro}', '${req.body.cidade}', ${ req.body.altura }, ${ req.body.largura }, '${req.body.data_plantio}', '${req.file.filename}');`, (error, results, fields) => {
-//             return res.json(results);
-//         });
-//     });
-// });
+routes.post('/arvore', multer(multerConfig).single('fotos'), (req, res) => {
+    connection.getConnection(function (err, connection) {
+        connection.query(`CALL insertArvore(${ req.body.id_tipo }, ${ req.body.latitude }, ${ req.body.longitude }, ${ req.body.cep }, '${req.body.rua}', '${req.body.bairro}', '${req.body.cidade}', ${ req.body.altura }, ${ req.body.largura }, '${req.body.data_plantio}', '${req.file.filename}');`, (error, results, fields) => {
+            return res.json(results);
+        });
+    });
+});
 
 routes.get('/arvore', (req, res) => {
     connection.getConnection(function (err, connection) {
