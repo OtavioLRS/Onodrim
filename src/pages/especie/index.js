@@ -67,8 +67,6 @@ export default class Especie extends Component {
         usuario: this.state.usuario
       }
       await fetch('https://onodrim.herokuapp.com/sugerir', {
-      // await fetch('http://192.168.43.169:3333/sugerir', {
-      // await fetch('http://186.217.108.38:3333/sugerir', {
         method: 'POST',
         headers: {
           Accept: 'application/json',
@@ -93,6 +91,8 @@ export default class Especie extends Component {
   render() {
     return(
       <Container>
+        <StatusBar hidden/>
+
         <Input
           placeholder="Nome"
           value={this.state.nome_popular}

@@ -1,10 +1,21 @@
-import { StatusBar, ActivityIndicator, Image, Picker, View } from 'react-native';
+import { Alert, StatusBar, ActivityIndicator, Image, Picker, View } from 'react-native';
 import { StackActions, NavigationActions } from 'react-navigation'
 import AsyncStorage from '@react-native-community/async-storage';
 import React, { Component } from 'react';
-
-import { styles, Container, Input, ButtonCadastro, ButtonCadastroText, ErrorMessage, SuccessMessage, } from './styles';
 import cep from 'cep-promise';
+
+import { 
+  styles, 
+  Container, 
+  Input, 
+  ButtonCadastro, 
+  ButtonCadastroText,
+  ButtonBack,
+  ButtonBackText, 
+  ErrorMessage, 
+  SuccessMessage, 
+} from './styles';
+
 export default class Arvore extends Component {
   static navigationOptions = {
     header: null
@@ -38,8 +49,6 @@ export default class Arvore extends Component {
     this.setState({fotos: foto.path, latitude, longitude});
 
     await fetch('https://onodrim.herokuapp.com/tipos', {
-    // await fetch('http://192.168.43.169:3333/tipos', {
-    // await fetch('http://186.217.108.38:3333/tipos', {
       method: 'GET',
       headers: {
         Accept: 'application/json',
@@ -136,12 +145,26 @@ export default class Arvore extends Component {
     this.setState({ rua });
   }
 
+  handleCancel = () => {
+    Alert.alert(
+      'Aviso!',
+      'Deseja realmente cancelar o cadastro da árvore?',
+      [
+        {text: 'Não', onPress: () => {}},
+        {text: 'Sim', onPress: () => {this.navegar('Mapa')}},
+      ],
+      { cancelable: false },  
+    )
+  }
+
   createFormData(foto, body) {
     const data = new FormData();
-
+    let type = foto.split('.');
+    type = type[type.length-1];
+    
     data.append('fotos', {
       name: foto,
-      type: 'image/jpg',
+      type: 'image/'+type,
       uri: foto,
     });
 
@@ -188,8 +211,6 @@ export default class Arvore extends Component {
       body.data_plantio = this.state.data_plantio;
 
       await fetch('https://onodrim.herokuapp.com/arvore', {
-      // await fetch('http://192.168.43.169:3333/arvore', {
-        // await fetch('http://186.217.108.38:3333/arvore', {
         method: 'POST',
         headers: {
           'Content-Type': 'multipart/form-data',
@@ -308,12 +329,16 @@ export default class Arvore extends Component {
           <ButtonCadastroText>Concluir</ButtonCadastroText>
         </ButtonCadastro>
 
+        <ButtonBack
+          onPress={this.handleCancel}>
+          <ButtonBackText>Cancelar</ButtonBackText>
+        </ButtonBack>
+
         {this.state.loading && 
           <View style={styles.loading}>
             <ActivityIndicator size='large'/>
           </View>  
         }
-
       </Container>
     );
   }

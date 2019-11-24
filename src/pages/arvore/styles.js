@@ -33,6 +33,20 @@ const ButtonCadastroText = styled.Text`
   textAlign: center;
 `;
 
+const ButtonBack = styled.TouchableHighlight`
+  padding: 10px;
+  marginTop: 10px;
+  backgroundColor: #78D561;
+  borderRadius: 5px;
+`;
+
+const ButtonBackText = styled.Text`
+  color: #FFF;
+  fontWeight: bold;
+  fontSize: 16px;
+  textAlign: center;
+`;
+
 const ErrorMessage = styled.Text`
   textAlign: center;
   color: #CE2029;
@@ -78,4 +92,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export { Container, Input, ButtonCadastro, ButtonCadastroText, ErrorMessage, SuccessMessage, styles};
+export { Container, Input, ButtonCadastro, ButtonCadastroText, ButtonBack, ButtonBackText, ErrorMessage, SuccessMessage, styles};

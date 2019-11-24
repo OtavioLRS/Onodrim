@@ -1,47 +1,12 @@
 import React, { Component } from 'react';
 import { StatusBar, View, Text, ActivityIndicator } from 'react-native';
 import MapView, {Marker} from 'react-native-maps';
+import { Footer, FooterTab, Button, Content } from 'native-base';
 import Geolocation from '@react-native-community/geolocation'
 import AsyncStorage from '@react-native-community/async-storage';
 import { StackActions, NavigationActions } from 'react-navigation';
 
-import { Container, styles } from './styles';
-
-// import { Drawer, Container, Header, Title, Content, Footer, FooterTab, Button, Left, Right, Body, Icon, Text } from 'native-base';
-// export default class Mapa extends Component {
-//   static navigationOptions = {
-//       header: null,
-//   };
-
-//   closeDrawer = () => {
-//     this.drawer._root.close();
-//   }; 
-
-//   openDrawer = () => { 
-//     this.drawer._root.open();
-//   };
-
-//   render() { 
-//     return (
-//       <Drawer 
-//         ref={(ref) => { this.drawer = ref; }} 
-//         content={<SideBar navigator={this.navigator} />} 
-//         onClose={() => this.closeDrawer()} > 
-
-//       </Drawer> 
-//     );
-//   }
-// }
-
-
-
-
-
-
-
-
-
-
+import {ContainerMap, TextButton, styles} from './styles';
 
 export default class Mapa extends Component {
   static navigationOptions = {
@@ -53,23 +18,35 @@ export default class Mapa extends Component {
     loading: true,
     move: false,
     markers: [],
+    listenTouch: false,
+    showFooter: true,
+    showPutTree: false,
   };
 
-  handleMapPress = async (e) => {
-    try {
-      await AsyncStorage.setItem('local', JSON.stringify(e.nativeEvent.coordinate));
-    } catch(e) {
-      alert(e);
-    }
-
+  navegar(rota) {
     const resetAction = StackActions.reset({
       index: 0,
       actions: [
-        NavigationActions.navigate({ routeName: 'Camera' }),
+        NavigationActions.navigate({ routeName: rota }),
       ],
     });
     this.props.navigation.dispatch(resetAction);
+  }
+
+  handleMapPress = async (e) => {
+    if(this.state.listenTouch) {
+      try {
+        await AsyncStorage.setItem('local', JSON.stringify(e.nativeEvent.coordinate));
+      } catch(e) {
+        alert(e);
+      }
+      this.navegar('Camera');
+    }
   };
+
+  handleArvorePress = () => {
+    this.setState({listenTouch: true, showFooter: false, showPutTree: true});
+  }
 
   async componentDidMount() {
     await Geolocation.clearWatch(this.watchID);
@@ -92,8 +69,6 @@ export default class Mapa extends Component {
         maximumAge: 10000
       });
     await fetch('https://onodrim.herokuapp.com/arvore', {
-      // await fetch('http://192.168.43.169:3333/arvore', {
-      // await fetch('http://186.217.108.38:3333/arvore', {
       method: 'GET',
       headers: {
         Accept: 'application/json',
@@ -115,37 +90,43 @@ export default class Mapa extends Component {
             });
           })
           this.setState({ loading: false, move: true, markers: elements });
-          
       })
-      
   }
 
   render() {
     const { region } = this.state;
 
     return (
-      <Container>
+      <ContainerMap>
         <StatusBar hidden/>
+
         <MapView
-        initialRegion={{
-          latitude: -22.132083070946305,
-          longitude: -51.391217261552820,
-          latitudeDelta: 0.0001,
-          longitudeDelta: 0.0001
-        }}
-        region={region}
-        style={styles.mapView}
-        rotateEnabled={this.state.move}
-        scrollEnabled={this.state.move}
-        zoomEnabled={this.state.move}
-        showsPointsOfInterest={false}
-        showBuildings={false}
-        showsUserLocation={true}
-        showsMyLocationButton={true}
-        onPress={this.handleMapPress}
-        minZoomLevel={17}
-        maxZoomLevel={30}
+          initialRegion={{
+            latitude: -22.132083070946305,
+            longitude: -51.391217261552820,
+            latitudeDelta: 0.0001,
+            longitudeDelta: 0.0001
+          }}
+          region={region}
+          style={styles.mapView}
+          rotateEnabled={this.state.move}
+          scrollEnabled={this.state.move}
+          zoomEnabled={this.state.move}
+          showsPointsOfInterest={false}
+          showBuildings={false}
+          showsUserLocation={true}
+          showsMyLocationButton={true}
+          onPress={this.handleMapPress}
+          minZoomLevel={17}
+          maxZoomLevel={30}
         >
+
+          {this.state.showPutTree &&
+            <View style={styles.position}>
+              <TextButton>Clique onde deseja incluir uma árvore</TextButton>
+            </View>
+          }
+
           {this.state.markers.map(marker => {
             return (
               <Marker
@@ -160,12 +141,28 @@ export default class Mapa extends Component {
           })}
         </MapView>
 
+        {this.state.showFooter && 
+          <Footer style={{ backgroundColor: "#78D561" }}>
+            <FooterTab style={{ backgroundColor: "#78D561" }}>
+              <Button onPress={this.handleArvorePress}>
+                <TextButton>Cadastrar árvore</TextButton>
+              </Button>
+            </FooterTab>
+            <FooterTab style={{ backgroundColor: "#78D561" }}>
+              <Button onPress={() => { this.navegar('Especie') }}>
+                <TextButton>Cadastrar espécie</TextButton>
+              </Button>
+            </FooterTab>
+          </Footer>
+        }
+
         {this.state.loading &&
           <View style={styles.loading}>
             <ActivityIndicator size='large' />
           </View>
-        }  
-      </Container>
+        }    
+
+      </ContainerMap>
     );
   }
 }

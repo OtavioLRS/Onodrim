@@ -31,9 +31,9 @@ export default class SignUp extends Component {
   };
 
   state = {
-    nome: 'adm',
-    email: 'adm',
-    senha: 'adm',
+    nome: '',
+    email: '',
+    senha: '',
     error: '',
     success: '',
   };
@@ -58,8 +58,7 @@ export default class SignUp extends Component {
     if (this.state.nome.length === 0 || this.state.email.length === 0 || this.state.senha.length === 0) {
       this.setState({ error: 'Preencha todos os campos para continuar!' }, () => false);
     } else {
-        // await fetch('http://192.168.0.102:3333/signup', {
-      await fetch('https://onodrim.herokuapp.com/signup', {
+        await fetch('https://onodrim.herokuapp.com/signup', {
           method: 'POST',
           headers: { 
             Accept: 'application/json',
@@ -73,22 +72,21 @@ export default class SignUp extends Component {
         })
         .then((response) => response.json())
         .then((responseJson) => {
+          console.log(responseJson);
           if (typeof(responseJson[0][0].erro) !== "undefined")
             this.setState({ error: responseJson[0][0].erro }, () => false);
           else {
             this.setState({ success: 'Conta criada com sucesso! Retornando para a tela de login', error: '' });
-            setTimeout(this.goToLogin, 2500);
+            setTimeout(() => {this.goToLogin()}, 2500);
           }
         })
           .catch(function (error) {
             alert(error.message);
-            console.log('There has been a problem with your fetch operation: ' + error.message);
-            throw error;
           });
     }
   };
 
-  goToLogin = () => {
+  goToLogin() {
     const resetAction = StackActions.reset({
       index: 0,
       actions: [

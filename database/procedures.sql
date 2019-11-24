@@ -1,6 +1,5 @@
 DELIMITER //
-select * from Arvore//
-select * from Tipo//
+
 DROP PROCEDURE if exists insertUser//
 CREATE PROCEDURE insertUser(v_nome VARCHAR(100), v_email VARCHAR(100), v_senha VARCHAR(100), permissao INT)
 BEGIN
@@ -77,29 +76,4 @@ BEGIN
     AND Arvore.longitude=Localizacao.longitude
     AND Arvore.id_tipo = Tipo.id_tipo
     ORDER BY Arvore.latitude ASC;
-END//
-call getArvores()//
-
-DROP PROCEDURE IF EXISTS insertTombamento//
-CREATE PROCEDURE insertTombamento(v_id_arvore INT, v_motivo VARCHAR(1000), v_decreto VARCHAR(20))
-BEGIN
-	DECLARE real_id_arvore INT;
-    SELECT id_arvore INTO real_id_arvore FROM Arvore WHERE id_arvore = v_id_arvore;
-    IF(real_id_arvore IS NULL) THEN
-		SELECT 'Árvore não cadastrada' AS erro;
-	ELSE
-		INSERT INTO Tombamento(id_arvore, motivo, decreto) VALUES (v_id_arvore, v_motivo, v_decreto);
-    END IF;
-END//
-
-DROP PROCEDURE IF EXISTS updateTombamento//
-CREATE PROCEDURE updateTombamento (v_id_arvore INT, v_motivo VARCHAR(1000), v_decreto VARCHAR(20))
-BEGIN
-	DECLARE real_id_arvore INT;
-    SELECT id_arvore INTO real_id_arvore FROM Arvore WHERE id_arvore = v_id_arvore;
-    IF(real_id_arvore IS NOT NULL) THEN
-		UPDATE Tombamento SET motivo = v_motivo, decreto = v_decreto WHERE id_arvore = v_id_arvore;
-	ELSE
-		SELECT 'Árvore não cadastrada' AS erro;
-	END IF;
 END//

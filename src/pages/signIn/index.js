@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import AsyncStorage from '@react-native-community/async-storage';
 import { StatusBar, ActivityIndicator, View } from 'react-native';
 import { StackActions, NavigationActions } from 'react-navigation';
-import Icon from 'react-native-vector-icons/FontAwesome';
 
 import {
   Container,
@@ -46,31 +45,29 @@ export default class SignIn extends Component {
     } else {
         this.setState({loading:true});
       await fetch('https://onodrim.herokuapp.com/signin', {
-        // await fetch('http://192.168.43.169:3333/signin', {
-      // await fetch('http://186.217.108.38:3333/signin', {
-          method: 'POST',
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            email: this.state.email,
-            senha: this.state.senha
-          }),
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: this.state.email,
+          senha: this.state.senha
+        }),
+      })
+        .then((response) => response.json())
+        .then((responseJson) => {
+          if (typeof (responseJson[0][0].erro) !== "undefined"){
+            this.setState({ error: responseJson[0][0].erro }, () => false);
+            this.setState({loading:false});
+          }
+          else {
+            AsyncStorage.setItem('usuario', JSON.stringify(responseJson[0][0]));
+            console.log(responseJson);
+            this.setState({ loading: false });
+            this.logIn();
+          }
         })
-          .then((response) => response.json())
-          .then((responseJson) => {
-            if (typeof (responseJson[0][0].erro) !== "undefined"){
-              this.setState({ error: responseJson[0][0].erro }, () => false);
-              this.setState({loading:false});
-            }
-            else {
-              AsyncStorage.setItem('usuario', JSON.stringify(responseJson[0][0]));
-              console.log(responseJson);
-              this.setState({ loading: false });
-              this.logIn();
-            }
-          })
           .catch((error) => {
             alert(error);
             throw error;

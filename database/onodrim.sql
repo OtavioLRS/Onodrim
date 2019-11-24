@@ -1,8 +1,3 @@
-CREATE DATABASE Onodrim;
--- DROP DATABASE Onodrim;
-
-USE Onodrim;
-
 CREATE TABLE Usuario (
     email VARCHAR(100) NOT NULL,
 	nome VARCHAR(100) NOT NULL,
@@ -50,13 +45,13 @@ CREATE TABLE Arvore (
     CONSTRAINT fk_localizacao FOREIGN KEY (latitude, longitude) REFERENCES Localizacao (latitude, longitude) ON DELETE CASCADE
 );
 
-CREATE TABLE Tombamento (
-	id_arvore INT NOT NULL,
-	motivo VARCHAR(1000),
-    decreto VARCHAR(20),
-    CONSTRAINT fk_arvore FOREIGN KEY (id_arvore) REFERENCES Arvore (id_arvore) ON UPDATE CASCADE
-);
+INSERT INTO `Usuario` (`email`, `nome`, `senha`, `grau_permissao`) VALUES
+('adm', 'adm', 'b09c600fddc573f117449b3723f23d64', 3),
+('leonardo.higuti@unesp.br', 'Leonardo Yudi Higuti', '657b298b04e033810343842f993c9817', 3),
+('otavio.leite@unesp.br', 'Otávio Leite dos Santos', 'fff37b8bf4af5f8c7a2e6473709018e7', 3);
+
+INSERT INTO `Tipo` (`id_tipo`, `nome_cientifico`, `nome_popular`, `fruto`, `utilidade`, `usuario`, `data_sugestao`, `checado`, `data_checagem`) VALUES
+(5, 'Laranjus', 'Laranjeiro', 'Laranjo', 'Figurinhas e memes', 'otavio.leite@unesp.br', '2019-11-09', 2, '2019-11-09');
 
 INSERT INTO Usuario(email, nome, senha, grau_permissao) VALUES ('otavio.leite@unesp.br', 'Otávio Leite dos Santos', MD5('otavio123'), 3);
-
 INSERT INTO Usuario(email, nome, senha, grau_permissao) VALUES ('leonardo.higuti@unesp.br', 'Leonardo Yudi Higuti', MD5('leo123'), 3);
