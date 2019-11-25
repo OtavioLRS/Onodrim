@@ -19,20 +19,6 @@ const Input = styled.TextInput`
   fontSize: 16px;
 `;
 
-const ButtonSugerir = styled.TouchableHighlight`
-  padding: 10px;
-  marginTop: 20px;
-  backgroundColor: #FFF;
-  borderRadius: 5px;
-`;
-
-const ButtonSugerirText = styled.Text`
-  color: #78D561;
-  fontWeight: bold;
-  fontSize: 20px;
-  textAlign: center;
-`;
-
 const ButtonBack = styled.TouchableHighlight`
   padding: 10px;
   marginTop: 10px;
@@ -72,7 +58,13 @@ const styles = StyleSheet.create({
     bottom: 0,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+
+  botao: {
+    flexDirection: 'row',
+    // alignItems: 'center',
+    // justifyContent: 'center',
   }
 });
 
-export { Container, Input, ButtonSugerir, ButtonSugerirText, ButtonBack, ButtonBackText, ErrorMessage, SuccessMessage, styles };
+export { Container, Input, ButtonBack, ButtonBackText, ErrorMessage, SuccessMessage, styles };

@@ -6,6 +6,7 @@ import Especie from './pages/especie';
 import Arvore from './pages/arvore';
 import SignIn from './pages/signIn';
 import SignUp from './pages/signUp';
+import Checagem from './pages/checagem';
 
 const Routes = createStackNavigator({
   SignIn,
@@ -14,6 +15,7 @@ const Routes = createStackNavigator({
   Camera,
   Arvore,
   Especie,
+  Checagem,
 });
 
 export default createAppContainer(Routes);

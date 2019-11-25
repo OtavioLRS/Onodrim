@@ -71,7 +71,7 @@ const ContainerMap = styled.View`
 const TextButton = styled.Text`
   color: #FFF;
   fontWeight: bold;
-  fontSize: 16px;
+  fontSize: 10px;
   textAlign: center;
 `;
 

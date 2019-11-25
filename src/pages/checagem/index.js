@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
-import { StatusBar, ActivityIndicator, View } from 'react-native';
+import { StatusBar, ActivityIndicator, View, Button } from 'react-native';
 import { StackActions, NavigationActions } from 'react-navigation';
-import { styles, Container, Input, ButtonSugerir, ButtonSugerirText, ButtonBack, ButtonBackText, SuccessMessage, ErrorMessage } from './styles';
+import { Icon } from 'native-base';
+import { styles, Container, Input, ButtonBack, ButtonBackText, SuccessMessage, ErrorMessage } from './styles';
 import AsyncStorage from '@react-native-community/async-storage';
 
-export default class Especie extends Component {
+export default class Checagem extends Component {
   static navigationOptions = {
     header: null
   };
@@ -33,13 +34,13 @@ export default class Especie extends Component {
 
   async componentDidMount() {
     const usuario = JSON.parse(await AsyncStorage.getItem('usuario'));
-    this.setState({usuario: usuario.email});
+    this.setState({ usuario: usuario.email });
   }
 
   handleNomeChange = (nome_popular) => {
     this.setState({ nome_popular });
   }
-  
+
   handleNomeCientChange = (nome_cientifico) => {
     this.setState({ nome_cientifico });
   }
@@ -53,12 +54,12 @@ export default class Especie extends Component {
   }
 
   handleSugerirPress = async () => {
-    if(this.state.nome_popular == '')
-      this.setState({error: 'Insira um nome para a espécie!'});
+    if (this.state.nome_popular == '')
+      this.setState({ error: 'Insira um nome para a espécie!' });
     else if (this.state.nome_cientifico == '')
-      this.setState({error: 'Insira o nome científico da espécie!'});
+      this.setState({ error: 'Insira o nome científico da espécie!' });
     else {
-      this.setState({loading: true, editable: false});
+      this.setState({ loading: true, editable: false });
       const body = {
         nome_popular: this.state.nome_popular,
         nome_cientifico: this.state.nome_cientifico,
@@ -89,9 +90,9 @@ export default class Especie extends Component {
   }
 
   render() {
-    return(
+    return (
       <Container>
-        <StatusBar hidden/>
+        <StatusBar hidden />
 
         <Input
           placeholder="Nome"
@@ -134,11 +135,19 @@ export default class Especie extends Component {
 
         {this.state.error.length !== 0 && <ErrorMessage>{this.state.error}</ErrorMessage>}
 
-        <ButtonSugerir onPress={this.handleSugerirPress}>
-          <ButtonSugerirText>Fazer sugestão</ButtonSugerirText>
-        </ButtonSugerir>
+        <View style={styles.botao}>
 
-        <ButtonBack onPress={() => {this.navegar('Mapa')}}>
+          <Button title="n eh" color="#e31a0b" style={{ width: 20 }}>
+            <Icon name="apps"></Icon>
+          </Button>
+
+          <Button title="eh" color="#06c719" style={{ width: 20 }}>
+            <Icon name="apps"></Icon>
+          </Button>
+
+        </View>
+
+        <ButtonBack onPress={() => { this.navegar('Mapa') }}>
           <ButtonBackText>Voltar</ButtonBackText>
         </ButtonBack>
 

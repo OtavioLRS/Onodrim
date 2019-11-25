@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { StatusBar, View, Text, ActivityIndicator } from 'react-native';
 import MapView, {Marker} from 'react-native-maps';
-import { Footer, FooterTab, Button, Content } from 'native-base';
+import { Footer, FooterTab, Button, Icon } from 'native-base';
 import Geolocation from '@react-native-community/geolocation'
 import AsyncStorage from '@react-native-community/async-storage';
 import { StackActions, NavigationActions } from 'react-navigation';
@@ -46,6 +46,13 @@ export default class Mapa extends Component {
 
   handleArvorePress = () => {
     this.setState({listenTouch: true, showFooter: false, showPutTree: true});
+  }
+
+  handleAnalise = async () => {
+    const user = JSON.parse(await AsyncStorage.getItem('usuario'));
+    if(user.grau_permissao > 1)
+      this.navegar('Checagem');
+    else alert('Você não tem permissão para acessar esta sessão!');
   }
 
   async componentDidMount() {
@@ -117,8 +124,8 @@ export default class Mapa extends Component {
           showsUserLocation={true}
           showsMyLocationButton={true}
           onPress={this.handleMapPress}
-          minZoomLevel={17}
-          maxZoomLevel={30}
+          minZoomLevel={20}
+          maxZoomLevel={40}
         >
 
           {this.state.showPutTree &&
@@ -145,12 +152,20 @@ export default class Mapa extends Component {
           <Footer style={{ backgroundColor: "#78D561" }}>
             <FooterTab style={{ backgroundColor: "#78D561" }}>
               <Button onPress={this.handleArvorePress}>
+              <Icon name="logo-apple" style={{color: 'white'}}/>
                 <TextButton>Cadastrar árvore</TextButton>
               </Button>
             </FooterTab>
             <FooterTab style={{ backgroundColor: "#78D561" }}>
               <Button onPress={() => { this.navegar('Especie') }}>
-                <TextButton>Cadastrar espécie</TextButton>
+                <Icon name="rose" style={{ color: 'white' }}/>
+                <TextButton>Sugerir espécie</TextButton>
+              </Button>
+            </FooterTab>
+            <FooterTab style={{ backgroundColor: "#78D561" }}>
+              <Button onPress={this.handleAnalise}>
+                <Icon name="apps" style={{ color: 'white' }}/>
+                <TextButton>Analisar sugestões</TextButton>
               </Button>
             </FooterTab>
           </Footer>
