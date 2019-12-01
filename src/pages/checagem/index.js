@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
-import { StatusBar, ActivityIndicator, View, Image, TouchableOpacity } from 'react-native';
+import { Alert, StatusBar, ActivityIndicator, View, Image, TouchableOpacity, Text } from 'react-native';
 import { StackActions, NavigationActions } from 'react-navigation';
-import { Icon } from 'native-base';
-import { styles, Container, Input, ButtonBack, ButtonBackText, SuccessMessage, ErrorMessage } from './styles';
+import { styles, Container, Input, ButtonBack, ButtonBackText } from './styles';
 import AsyncStorage from '@react-native-community/async-storage';
 
 export default class Checagem extends Component {
@@ -15,11 +14,9 @@ export default class Checagem extends Component {
     nome_cientifico: '',
     fruto: '',
     utilidade: '',
-    success: '',
-    error: '',
-    usuario: '',
     loading: false,
-    editable: true,
+    temSugestao: true,
+    sugestoes: [],
   }
 
   navegar(rota) {
@@ -33,80 +30,63 @@ export default class Checagem extends Component {
   }
 
   async componentDidMount() {
-    const usuario = JSON.parse(await AsyncStorage.getItem('usuario'));
-    this.setState({ usuario: usuario.email });
-
-    await fetch('https://onodrim.herokuapp.com/checar)', {
-      method: 'GET',
+    await fetch('https://onodrim.herokuapp.com/sugestoes)', {
+    // await fetch('http://192.168.0.103:3333/sugestoes)', {
+      method: 'get',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(body),
+    })
+      .then(response => {
+        console.log(response);
+        if(!Array.isArray(response)){
+          response.forEach(e => {
+            this.state.sugestoes.push(e);
+          })
+          const sug = this.state.sugestoes.shift();
+          this.state.nome_popular = sug.nome_popular;
+          this.state.nome_cientifico = sug.nome_cientifico;
+          this.state.fruto = sug.fruto;
+          this.state.utilidade = sug.utilidade;
+        }
+        else this.setState({temSugestao: false})
+      })
+      .catch(e => alert(e));
+  }
+
+  handleSugerirPress = async (option) => {
+    this.setState({loading: true});
+    await fetch('https://onodrim.herokuapp.com/checar)', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({nome_cientifico: this.state.nome_cientifico, checado: option}),
     })
       .then(response => response.json())
       .then(response => {
         if (Array.isArray(response)) {
-          this.setState({ error: response[0][0].erro, loading: false });
-          setTimeout(() => { this.navegar('Mapa') }, 3500);
-        }
-        else {
-          this.setState({ success: 'Espécie sugerida com sucesso!', error: '', loading: false });
-          setTimeout(() => { this.navegar('Mapa') }, 3500);
-        }
-      })
-  }
-
-  handleNomeChange = (nome_popular) => {
-    this.setState({ nome_popular });
-  }
-
-  handleNomeCientChange = (nome_cientifico) => {
-    this.setState({ nome_cientifico });
-  }
-
-  handleFrutoChange = (fruto) => {
-    this.setState({ fruto });
-  }
-
-  handleUtilidadeChange = (utilidade) => {
-    this.setState({ utilidade });
-  }
-
-  handleSugerirPress = async () => {
-    if (this.state.nome_popular == '')
-      this.setState({ error: 'Insira um nome para a espécie!' });
-    else if (this.state.nome_cientifico == '')
-      this.setState({ error: 'Insira o nome científico da espécie!' });
-    else {
-      this.setState({ loading: true, editable: false });
-      const body = {
-        nome_popular: this.state.nome_popular,
-        nome_cientifico: this.state.nome_cientifico,
-        fruto: this.state.fruto,
-        utilidade: this.state.utilidade,
-        usuario: this.state.usuario
-      }
-      await fetch('https://onodrim.herokuapp.com/sugerir', {
-        method: 'POST',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(body),
-      })
-        .then(response => response.json())
-        .then(response => {
-          if (Array.isArray(response)) {
-            this.setState({ error: response[0][0].erro, loading: false });
-            setTimeout(() => { this.navegar('Mapa') }, 3500);
+          switch (option) {
+            case 0: alert('Sugestão recusada com sucesso!'); break;
+            case 2: alert('Sugestão aceita com sucesso!'); break;
           }
-          else {
-            this.setState({ success: 'Espécie sugerida com sucesso!', error: '', loading: false });
-            setTimeout(() => { this.navegar('Mapa') }, 3500);
-          }
-        })
-    }
+          this.setState({ loading: false });
+          const sug = this.state.sugestoes.shift();
+          if(this.state.sugestoes.length == 0)
+            this.setState({temSugestao: false});
+
+          else this.setState({
+            nome_cientifico: sug.nome_cientifico,
+            nome_popular: sug.nome_popular,
+            fruto: sug.fruto,
+            utilidade: sug.utilidade,
+          });
+        }
+        else alert('Ocorreu um erro!');
+      })
+
   }
 
   render() {
@@ -114,64 +94,78 @@ export default class Checagem extends Component {
       <Container>
         <StatusBar hidden />
 
-        <Input
-          placeholder="Nome"
-          value={this.state.nome_popular}
-          onChangeText={this.handleNomeChange}
-          autoCapitalize="sentences"
-          autoCorrect={false}
-          editable={this.state.editable}
-        />
+        {!this.state.temSugestao &&
+          <View>
+            <Text>NÃO TEM SUGESTAO</Text>
+          </View>
+        }
 
-        <Input
-          placeholder="Nome científico"
-          value={this.state.nome_cientifico}
-          onChangeText={this.handleNomeCientChange}
-          autoCapitalize="sentences"
-          autoCorrect={false}
-          editable={this.state.editable}
-        />
+        {this.state.temSugestao &&
+          <View>
+          <Input
+            placeholder="Nome"
+            value={this.state.nome_popular}
+            editable={false}
+          />
 
-        <Input
-          placeholder="Fruto"
-          value={this.state.fruto}
-          onChangeText={this.handleFrutoChange}
-          autoCapitalize="sentences"
-          autoCorrect={false}
-          editable={this.state.editable}
-        />
+          <Input
+            placeholder="Nome científico"
+            value={this.state.nome_cientifico}
+            editable={false}
+          />
 
-        <Input
-          placeholder="Utilidades"
-          value={this.state.utilidade}
-          onChangeText={this.handleUtilidadeChange}
-          autoCapitalize="sentences"
-          autoCorrect={false}
-          multiline={true}
-          editable={this.state.editable}
-        />
+          <Input
+            placeholder="Fruto"
+            value={this.state.fruto}
+            editable={false}
+          />
 
-        {this.state.success.length !== 0 && <SuccessMessage>{this.state.success}</SuccessMessage>}
+          <Input
+            placeholder="Utilidades"
+            value={this.state.utilidade}
+            multiline={true}
+            editable={false}
+          />
+          </View>
+        }
 
-        {this.state.error.length !== 0 && <ErrorMessage>{this.state.error}</ErrorMessage>}
-
+        {this.state.temSugestao &&
         <View style={styles.botao}>
-
-          <TouchableOpacity>
-            <Image 
+          <TouchableOpacity onPress={() => {
+            Alert.alert(
+              'Aviso!',
+              'Deseja realmente recusar esta sugestão de espécie?',
+              [
+                { text: 'Não', onPress: () => { } },
+                { text: 'Sim', onPress: () => { this.handleSugerirPress(1) } },
+              ],
+              { cancelable: false },
+            )
+          }}>
+            <Image
               style={{ height: 50, width: 50, marginRight: 50 }}
               source={require('../../images/no.png')}
             />
           </TouchableOpacity>
 
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => { 
+            Alert.alert(
+              'Aviso!',
+              'Deseja realmente aceitar esta sugestão de espécie?',
+              [
+                { text: 'Não', onPress: () => { } },
+                { text: 'Sim', onPress: () => { this.handleSugerirPress(2) } },
+              ],
+              { cancelable: false },
+            )
+          }}>
             <Image
               style={{ height: 50, width: 50 }}
               source={require('../../images/yes.png')}
             />
           </TouchableOpacity>
-
         </View>
+        }
 
         <ButtonBack onPress={() => { this.navegar('Mapa') }}>
           <ButtonBackText>Voltar</ButtonBackText>
