@@ -19,23 +19,34 @@ const styles = StyleSheet.create({
   },
 
   place: {
+    alignContent: 'center',
+    justifyContent: 'flex-start',
+    borderRadius: 10,
+    backgroundColor: '#78D561',
+    padding: 20,
+  },
+
+  escolherpos: {
     width: width - 40,
     maxHeight: 200,
-    backgroundColor: '#FFF',
+    backgroundColor: '#78D561',
     marginHorizontal: 20,
-    borderTopLeftRadius: 10,
-    borderTopRightRadius: 10,
+    marginVertical: 20,
+    borderRadius: 10,
     padding: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 
   title: {
     fontWeight: 'bold',
     fontSize: 18,
     backgroundColor: 'transparent',
+    color: '#FFF'
   },
 
   description: {
-    color: '#999',
+    color: '#FFF',
     fontSize: 12,
     marginTop: 5,
   },
@@ -58,6 +69,14 @@ const styles = StyleSheet.create({
     bottom: 0,
     alignItems: 'flex-start',
     justifyContent: 'flex-start',
+  },
+
+  back: {
+    left: 10,
+    top: 10,
+    position: 'absolute',
+    alignItems: 'flex-start',
+    justifyContent: 'flex-start',
   }
 });
 
@@ -68,6 +87,13 @@ const ContainerMap = styled.View`
   backgroundColor: #78D561;
 `;
 
+const ButtonGreen = styled.TouchableHighlight`
+  padding: 10px;
+  marginTop: 20px;
+  backgroundColor: #FFF;
+  borderRadius: 5px;
+`;
+
 const TextButton = styled.Text`
   color: #FFF;
   fontWeight: bold;
@@ -75,4 +101,4 @@ const TextButton = styled.Text`
   textAlign: center;
 `;
 
-export { styles, ContainerMap, TextButton };
+export { styles, ContainerMap, TextButton, ButtonGreen };

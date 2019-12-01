@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StatusBar, ActivityIndicator, View, Button } from 'react-native';
+import { StatusBar, ActivityIndicator, View, Image, TouchableOpacity } from 'react-native';
 import { StackActions, NavigationActions } from 'react-navigation';
 import { Icon } from 'native-base';
 import { styles, Container, Input, ButtonBack, ButtonBackText, SuccessMessage, ErrorMessage } from './styles';
@@ -137,13 +137,19 @@ export default class Checagem extends Component {
 
         <View style={styles.botao}>
 
-          <Button title="n eh" color="#e31a0b" style={{ width: 20 }}>
-            <Icon name="apps"></Icon>
-          </Button>
+          <TouchableOpacity>
+            <Image 
+              style={{ height: 50, width: 50, marginRight: 50 }}
+              source={require('../../images/no.png')}
+            />
+          </TouchableOpacity>
 
-          <Button title="eh" color="#06c719" style={{ width: 20 }}>
-            <Icon name="apps"></Icon>
-          </Button>
+          <TouchableOpacity>
+            <Image
+              style={{ height: 50, width: 50 }}
+              source={require('../../images/yes.png')}
+            />
+          </TouchableOpacity>
 
         </View>
 

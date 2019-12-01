@@ -51,7 +51,7 @@ const ErrorMessage = styled.Text`
   textAlign: center;
   color: #CE2029;
   fontSize: 16px;
-  marginBottom: 15px;
+  marginBottom: 5px;
   marginHorizontal: 20px;
 `;
 
@@ -59,7 +59,7 @@ const SuccessMessage = styled.Text`
   textAlign: center;
   color: #08a092;
   fontSize: 16px;
-  marginBottom: 15px;
+  marginBottom: 5px;
   marginHorizontal: 20px;
 `;
 
@@ -89,7 +89,7 @@ const styles = StyleSheet.create({
     bottom: 0,
     alignItems: 'center',
     justifyContent: 'center',
-  }
+  },
 });
 
 export { Container, Input, ButtonCadastro, ButtonCadastroText, ButtonBack, ButtonBackText, ErrorMessage, SuccessMessage, styles};

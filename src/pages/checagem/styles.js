@@ -61,9 +61,8 @@ const styles = StyleSheet.create({
   },
 
   botao: {
+    alignItems: 'center',
     flexDirection: 'row',
-    // alignItems: 'center',
-    // justifyContent: 'center',
   }
 });
 

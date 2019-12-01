@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import { StatusBar, View, Text, ActivityIndicator } from 'react-native';
-import MapView, {Marker} from 'react-native-maps';
+import { StatusBar, View, Text, ActivityIndicator, ScrollView, Dimensions, Image, TouchableOpacity, TouchableHighlight } from 'react-native';
+import MapView from 'react-native-maps';
 import { Footer, FooterTab, Button, Icon } from 'native-base';
 import Geolocation from '@react-native-community/geolocation'
 import AsyncStorage from '@react-native-community/async-storage';
 import { StackActions, NavigationActions } from 'react-navigation';
 
-import {ContainerMap, TextButton, styles} from './styles';
+import { ContainerMap, TextButton, styles, ButtonGreen } from './styles';
 
 export default class Mapa extends Component {
   static navigationOptions = {
@@ -33,9 +33,35 @@ export default class Mapa extends Component {
     this.props.navigation.dispatch(resetAction);
   }
 
+  handleLocalatual = async () => {
+    if(this.state.listenTouch) {
+      try {
+        await Geolocation.getCurrentPosition(
+          ({ coords }) => {
+            const coordinate = {
+              latitude: coords.latitude,
+              longitude: coords.longitude,
+            }
+            console.log(coordinate);
+            AsyncStorage.setItem('local', JSON.stringify(coordinate));
+          },
+          () => { }, {
+            useSignificantChanges: true,
+            enableHighAccuracy: true,
+            timeout: 20000,
+            maximumAge: 10000
+          });
+      } catch(e) {
+        alert(e);
+      }
+      this.navegar('Camera');
+    }
+  }
+
   handleMapPress = async (e) => {
     if(this.state.listenTouch) {
       try {
+        console.log(e.nativeEvent.coordinate);
         await AsyncStorage.setItem('local', JSON.stringify(e.nativeEvent.coordinate));
       } catch(e) {
         alert(e);
@@ -94,6 +120,8 @@ export default class Mapa extends Component {
               id: e.id_arvore,
               nome: e.nome_popular,
               nome_cientifico: e.nome_cientifico,
+              foto: e.fotos,
+              mark: null,
             });
           })
           this.setState({ loading: false, move: true, markers: elements });
@@ -108,6 +136,7 @@ export default class Mapa extends Component {
         <StatusBar hidden/>
 
         <MapView
+          ref={map => this.mapView = map}
           initialRegion={{
             latitude: -22.132083070946305,
             longitude: -51.391217261552820,
@@ -124,29 +153,59 @@ export default class Mapa extends Component {
           showsUserLocation={true}
           showsMyLocationButton={true}
           onPress={this.handleMapPress}
-          minZoomLevel={20}
-          maxZoomLevel={40}
+          minZoomLevel={15}
+          maxZoomLevel={50}
         >
-
-          {this.state.showPutTree &&
-            <View style={styles.position}>
-              <TextButton>Clique onde deseja incluir uma árvore</TextButton>
-            </View>
-          }
 
           {this.state.markers.map(marker => {
             return (
-              <Marker
+              <MapView.Marker
+                ref={mark => marker.mark = mark}
                 key={marker.id}
                 title={marker.nome}
                 description={marker.nome_cientifico}
                 coordinate={marker.latlong}
                 pinColor={'green'}
               >
-              </ Marker>
+                <MapView.Callout tooltip={true}>
+                  <View style={styles.place}>
+                    <Text>
+                      <Image
+                        style={{ height: 50, width: 50 }}
+                        source={{ uri: marker.foto }}
+                        resizeMode="cover"
+                      />
+                    </Text>
+                    <Text style={styles.description}>
+                      Id: {marker.id}{"\n"}
+                      Nome popular: {marker.nome}{"\n"}
+                      Nome científico: {marker.nome_cientifico}
+                    </Text>
+                  </View>
+                </MapView.Callout>
+              </MapView.Marker>
             );
           })}
+
         </MapView>
+
+        {this.state.showPutTree &&
+          <TouchableOpacity style={styles.back} onPress={() => { this.setState({ showPutTree: false, listenTouch: false, showFooter: true }) }}>
+            <Image
+              style={{ height: 50, width: 50 }}
+              source={require('../../images/back.png')}
+            />
+          </TouchableOpacity>
+        }
+
+        {this.state.showPutTree &&
+          <View style={styles.escolherpos}>
+            <TextButton style={{ fontSize: 15 }}>Toque na localização da árvore</TextButton>
+            <ButtonGreen style={{ width: 100, }}onPress={this.handleLocalatual}>
+              <TextButton style={{ color: '#78D561'}}>Usar localização do usuário</TextButton>
+            </ButtonGreen>
+          </View>
+        }
 
         {this.state.showFooter && 
           <Footer style={{ backgroundColor: "#78D561" }}>
@@ -181,37 +240,3 @@ export default class Mapa extends Component {
     );
   }
 }
-
-
-
-
-
-/* <ScrollView
-    style={styles.placesContainer}
-    horizontal
-    pagingEnabled
-    showsHorizontalScrollIndicator={false}
-    onMomentumScrollEnd={(e) => {
-      const place = (e.nativeEvent.contentOffset.x > 0)
-        ? e.nativeEvent.contentOffset.x / Dimensions.get('window').width
-        : 0;
-
-      const { latitude, longitude, mark } = this.state.places[place];
-
-      this.mapView.animateToCoordinate({
-        latitude,
-        longitude
-      }, 500);
-
-      setTimeout(() => {
-        mark.showCallout();
-      }, 500)
-    }}
-  >
-    {this.state.places.map(place => (
-      <View key={place.id} style={styles.place}>
-        <Text style={styles.title}>{place.title}</Text>
-        <Text style={styles.description}>{place.description}</Text>
-      </View>
-    ))}
-  </ScrollView> */
