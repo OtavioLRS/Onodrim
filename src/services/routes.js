@@ -55,12 +55,28 @@ routes.get('/tipos', (req, res) => {
     });
 });
 
+routes.get('/sugestoes', (req, res) => {
+    connection.getConnection(function (err, connection) {
+        connection.query(`SELECT * FROM Tipo WHERE checado = 1;`, (error, results, fields) => {
+            return res.json(results);
+        });
+    });
+});
+
 routes.post('/checar', (req, res) => {
     connection.getConnection(function (err, connection) {
         connection.query(`CALL checaTipo('${req.body.nome_cientifico}', ${req.body.checado});`, (error, results, fields) => {
             return res.json(results);
         });
     });
+});
+
+routes.get('/arvore', (req, res) => {
+    connection.getConnection(function (err, connection) {
+        connection.query(`CALL getArvores();`, (error, results, fields) => {
+            return res.json(results);
+        });
+    })
 });
 
 routes.post('/arvore', multer(multerConfig).single('fotos'), (req, res) => {

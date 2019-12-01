@@ -35,6 +35,26 @@ export default class Checagem extends Component {
   async componentDidMount() {
     const usuario = JSON.parse(await AsyncStorage.getItem('usuario'));
     this.setState({ usuario: usuario.email });
+
+    await fetch('https://onodrim.herokuapp.com/checar)', {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(body),
+    })
+      .then(response => response.json())
+      .then(response => {
+        if (Array.isArray(response)) {
+          this.setState({ error: response[0][0].erro, loading: false });
+          setTimeout(() => { this.navegar('Mapa') }, 3500);
+        }
+        else {
+          this.setState({ success: 'Espécie sugerida com sucesso!', error: '', loading: false });
+          setTimeout(() => { this.navegar('Mapa') }, 3500);
+        }
+      })
   }
 
   handleNomeChange = (nome_popular) => {
