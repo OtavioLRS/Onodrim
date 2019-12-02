@@ -127,7 +127,10 @@ export default class Mapa extends Component {
               id: e.id_arvore,
               nome: e.nome_popular,
               nome_cientifico: e.nome_cientifico,
-              foto: e.fotos,
+              fotos: e.fotos,
+              altura: e.altura,
+              largura: e.largura,
+              data_plantio: e.data_plantio,
               mark: null,
             });
           })
@@ -172,26 +175,30 @@ export default class Mapa extends Component {
                 title={marker.nome}
                 description={marker.nome_cientifico}
                 coordinate={marker.latlong}
-                onPress={() => {
-                  // const aux = {
-                  //   nome_cientifico: marker.nome_cientifico,
-                  //   fotos: marker.fotos,
-                  //   nome_cientifico: marker.nome_cientifico,
-                  // }
-                  // await AsyncStorage.setItem('marker', JSON.stringify(aux));
-                }}
                 pinColor={'green'}
               >
                 <MapView.Callout 
                   tooltip={true} 
-                  onPress={() => {
-                    // this.navegar('Detalhes');
+                  onPress={async () => {
+                    let aux = {
+                      nome_cientifico: marker.nome_cientifico,
+                      nome_popular: marker.nome,
+                      altura: marker.altura,
+                      largura: marker.largura,
+                      data_plantio: marker.data_plantio,
+                      fotos: marker.fotos,
+                    }
+                    await AsyncStorage.setItem('marker', JSON.stringify(aux));
+                    this.navegar('Detalhes');
                   }}
                 >
                   <View style={styles.place}>
-                    <Text style={styles.description}>
-                      Nome popular: {marker.nome}{"\n"}
-                      Nome científico: {marker.nome_cientifico}{"\n"}
+                    <Text>
+                      <Image
+                        style={styles.place}
+                        source={{uri: marker.fotos}}
+                        resizeMode='cover'
+                      />
                     </Text>
                   </View>
                 </MapView.Callout>

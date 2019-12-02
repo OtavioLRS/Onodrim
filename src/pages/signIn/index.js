@@ -21,8 +21,8 @@ export default class SignIn extends Component {
   };
 
   state = {
-    email: 'adm',
-    senha: 'adm',
+    email: '',
+    senha: '',
     error: '',
     loading: false,
   };

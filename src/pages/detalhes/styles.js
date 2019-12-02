@@ -4,7 +4,7 @@ import { StyleSheet } from 'react-native';
 const Container = styled.View`  
   flex: 1;
   alignItems: center;
-  justifyContent: flex-start;
+  justifyContent: center;
   backgroundColor: #78D561;
 `;
 
@@ -67,20 +67,9 @@ const styles = StyleSheet.create({
   imagem: {
     width: 100,
     height: 100,
-    marginTop: 10,
-    marginBottom: 5,
-    borderRadius: 5
+    borderRadius: 10
   },
-  picker: {
-    paddingHorizontal: 20,
-    paddingVertical: 5,
-    borderRadius: 5,
-    backgroundColor: '#FFF',
-    alignSelf: 'stretch',
-    marginBottom: 15,
-    marginHorizontal: 20,
-    fontSize: 16,
-  },
+
   loading: {
     position: 'absolute',
     left: 0,

@@ -233,7 +233,7 @@ export default class Arvore extends Component {
 
   render() {
     let listaEspecies = this.state.itensEspecies.map((especie) => {
-      return (<Picker.Item value={especie.id_tipo} label={especie.nome_cientifico} key={especie.id_tipo}/>);
+      return (<Picker.Item value={especie.id_tipo} label={especie.nome_popular} key={especie.id_tipo}/>);
     })
 
     return(

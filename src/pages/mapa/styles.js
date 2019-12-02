@@ -19,11 +19,9 @@ const styles = StyleSheet.create({
   },
 
   place: {
-    alignContent: 'center',
-    justifyContent: 'center',
+    width: 100,
+    height: 100,
     borderRadius: 10,
-    backgroundColor: '#78D561',
-    padding: 20,
   },
 
   escolherpos: {

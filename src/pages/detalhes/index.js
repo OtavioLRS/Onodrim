@@ -1,4 +1,4 @@
-import { Alert, StatusBar, ActivityIndicator, Image, View } from 'react-native';
+import { Alert, StatusBar, ActivityIndicator, Image, View, Text } from 'react-native';
 import { StackActions, NavigationActions } from 'react-navigation'
 import AsyncStorage from '@react-native-community/async-storage';
 import React, { Component } from 'react';
@@ -17,12 +17,28 @@ export default class Detalhes extends Component {
   };
 
   state = {
-    
+    editable: false,
+    altura: '',
+    largura: '',
+    data_plantio: '',
+    nome_popular: '',
+    nome_cientifico: '',
+    usuario: '',
+    foto: null,
   }
 
   async componentDidMount() {
     let arvore = JSON.parse(await AsyncStorage.getItem('marker'));
-    console.log(arvore);
+    if (arvore.altura != '') arvore.altura = arvore.altura.toString();
+    if (arvore.largura != '') arvore.largura = arvore.largura.toString();
+    this.setState({
+      nome_popular: arvore.nome_popular,
+      nome_cientifico: arvore.nome_cientifico,
+      altura: arvore.altura,
+      largura: arvore.largura,
+      data_plantio: arvore.data_plantio,
+      fotos: arvore.fotos
+    })
   }
 
   navegar(rota) {
@@ -39,71 +55,47 @@ export default class Detalhes extends Component {
     return (
       <Container>
         <StatusBar hidden />
-        <Image source={{ uri: this.state.fotos }} style={styles.imagem} />
 
+        <View style={styles.imagem, {marginBottom: 10, borderbackgroundColor: '#FFF'}}>
+          <Image source={{ uri: this.state.fotos }} style={styles.imagem} resizeMode='cover' />
+        </View>
+
+        <ButtonBackText style={{marginBottom: 5 }}>Nome</ButtonBackText>
         <Input
-          placeholder="Altura"
+          value={this.state.nome_popular}
+          autoCapitalize="none"
+          autoCorrect={false}
+          editable={this.state.editable}
+        />
+
+        <ButtonBackText style={{marginBottom: 5 }}>Nome cientifico</ButtonBackText>
+        <Input
+          value={this.state.nome_cientifico}
+          autoCapitalize="none"
+          autoCorrect={false}
+          editable={this.state.editable}
+        />
+
+        <ButtonBackText style={{marginBottom: 5 }}>Altura</ButtonBackText>
+        <Input
           value={this.state.altura}
-          onChangeText={this.handleAlturaChange}
           autoCapitalize="none"
           autoCorrect={false}
-          keyboardType={'numeric'}
           editable={this.state.editable}
         />
 
+        <ButtonBackText style={{marginBottom: 5 }}>Largura</ButtonBackText>
         <Input
-          placeholder="Largura"
           value={this.state.largura}
-          onChangeText={this.handleLarguraChange}
           autoCapitalize="none"
           autoCorrect={false}
-          keyboardType={'numeric'}
           editable={this.state.editable}
         />
 
+        <ButtonBackText style={{marginBottom: 5 }}>Data de plantio</ButtonBackText>
         <Input
-          placeholder="Data plantio (DD/MM/AAAA)"
           value={this.state.data_plantio}
-          onChangeText={this.handlePlantioChange}
           autoCapitalize="none"
-          autoCorrect={false}
-          keyboardType={'numeric'}
-          editable={this.state.editable}
-        />
-
-        <Input
-          placeholder="CEP"
-          value={this.state.cep}
-          onChangeText={this.handleCEPChange}
-          autoCapitalize="none"
-          autoCorrect={false}
-          keyboardType={'numeric'}
-          editable={this.state.editable}
-        />
-
-        <Input
-          placeholder="Cidade"
-          value={this.state.cidade}
-          onChangeText={this.handleCidadeChange}
-          autoCapitalize="words"
-          autoCorrect={false}
-          editable={this.state.editable}
-        />
-
-        <Input
-          placeholder="Bairro"
-          value={this.state.bairro}
-          onChangeText={this.handleBairroChange}
-          autoCapitalize="words"
-          autoCorrect={false}
-          editable={this.state.editable}
-        />
-
-        <Input
-          placeholder="Rua"
-          value={this.state.rua}
-          onChangeText={this.handleRuaChange}
-          autoCapitalize="words"
           autoCorrect={false}
           editable={this.state.editable}
         />
