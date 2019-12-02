@@ -29,8 +29,8 @@ export default class Detalhes extends Component {
 
   async componentDidMount() {
     let arvore = JSON.parse(await AsyncStorage.getItem('marker'));
-    if (arvore.altura != '') arvore.altura = arvore.altura.toString();
-    if (arvore.largura != '') arvore.largura = arvore.largura.toString();
+    if (arvore.altura != null) arvore.altura = arvore.altura.toString();
+    if (arvore.largura != null) arvore.largura = arvore.largura.toString();
     this.setState({
       nome_popular: arvore.nome_popular,
       nome_cientifico: arvore.nome_cientifico,
