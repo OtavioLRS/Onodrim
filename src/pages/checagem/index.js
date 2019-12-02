@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Alert, StatusBar, ActivityIndicator, View, Image, TouchableOpacity, Text } from 'react-native';
 import { StackActions, NavigationActions } from 'react-navigation';
 import { styles, Container, Input, ButtonBack, ButtonBackText } from './styles';
-import AsyncStorage from '@react-native-community/async-storage';
 
 export default class Checagem extends Component {
   static navigationOptions = {
@@ -30,25 +29,29 @@ export default class Checagem extends Component {
   }
 
   async componentDidMount() {
-    await fetch('https://onodrim.herokuapp.com/sugestoes)', {
-    // await fetch('http://192.168.0.103:3333/sugestoes)', {
-      method: 'get',
+    await fetch('https://onodrim.herokuapp.com/sugestoes', {
+      method: 'GET',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
     })
+      .then(response => response.json())
       .then(response => {
-        console.log(response);
-        if(!Array.isArray(response)){
+        if(response.length != 0) {
           response.forEach(e => {
             this.state.sugestoes.push(e);
           })
-          const sug = this.state.sugestoes.shift();
-          this.state.nome_popular = sug.nome_popular;
-          this.state.nome_cientifico = sug.nome_cientifico;
-          this.state.fruto = sug.fruto;
-          this.state.utilidade = sug.utilidade;
+
+          let sug = this.state.sugestoes.shift();
+
+          this.setState({
+            nome_popular: sug.nome_popular,
+            nome_cientifico: sug.nome_cientifico,
+            fruto: sug.fruto,
+            utilidade: sug.utilidade,
+          })
+          
         }
         else this.setState({temSugestao: false})
       })
@@ -57,7 +60,7 @@ export default class Checagem extends Component {
 
   handleSugerirPress = async (option) => {
     this.setState({loading: true});
-    await fetch('https://onodrim.herokuapp.com/checar)', {
+    await fetch('https://onodrim.herokuapp.com/checar', {
       method: 'POST',
       headers: {
         Accept: 'application/json',
@@ -67,24 +70,26 @@ export default class Checagem extends Component {
     })
       .then(response => response.json())
       .then(response => {
-        if (Array.isArray(response)) {
+        if (!Array.isArray(response)) {
           switch (option) {
             case 0: alert('Sugestão recusada com sucesso!'); break;
             case 2: alert('Sugestão aceita com sucesso!'); break;
           }
-          this.setState({ loading: false });
-          const sug = this.state.sugestoes.shift();
-          if(this.state.sugestoes.length == 0)
-            this.setState({temSugestao: false});
 
-          else this.setState({
-            nome_cientifico: sug.nome_cientifico,
-            nome_popular: sug.nome_popular,
-            fruto: sug.fruto,
-            utilidade: sug.utilidade,
-          });
+          const sug = this.state.sugestoes.shift();
+          if(!sug)
+            this.setState({temSugestao: false});
+          else {
+            this.setState({
+              nome_cientifico: sug.nome_cientifico,
+              nome_popular: sug.nome_popular,
+              fruto: sug.fruto,
+              utilidade: sug.utilidade,
+            })
+          };
         }
         else alert('Ocorreu um erro!');
+        this.setState({ loading: false });
       })
 
   }
@@ -96,31 +101,33 @@ export default class Checagem extends Component {
 
         {!this.state.temSugestao &&
           <View>
-            <Text>NÃO TEM SUGESTAO</Text>
+            <ButtonBackText style={{width: 250}}>
+              Não há nenhuma sugestão para ser avaliada no momento!
+            </ButtonBackText>
           </View>
         }
 
-        {this.state.temSugestao &&
+        { this.state.temSugestao && 
           <View>
-          <Input
+          <Input style={{width: 300}}
             placeholder="Nome"
             value={this.state.nome_popular}
             editable={false}
           />
 
-          <Input
+          <Input style={{ width: 300 }}
             placeholder="Nome científico"
             value={this.state.nome_cientifico}
             editable={false}
           />
 
-          <Input
+          <Input style={{ width: 300 }}
             placeholder="Fruto"
             value={this.state.fruto}
             editable={false}
           />
 
-          <Input
+          <Input style={{ width: 300 }}
             placeholder="Utilidades"
             value={this.state.utilidade}
             multiline={true}
@@ -128,6 +135,7 @@ export default class Checagem extends Component {
           />
           </View>
         }
+        
 
         {this.state.temSugestao &&
         <View style={styles.botao}>
@@ -137,7 +145,7 @@ export default class Checagem extends Component {
               'Deseja realmente recusar esta sugestão de espécie?',
               [
                 { text: 'Não', onPress: () => { } },
-                { text: 'Sim', onPress: () => { this.handleSugerirPress(1) } },
+                { text: 'Sim', onPress: () => { this.handleSugerirPress(0) } },
               ],
               { cancelable: false },
             )

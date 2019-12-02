@@ -20,7 +20,7 @@ const styles = StyleSheet.create({
 
   place: {
     alignContent: 'center',
-    justifyContent: 'flex-start',
+    justifyContent: 'center',
     borderRadius: 10,
     backgroundColor: '#78D561',
     padding: 20,

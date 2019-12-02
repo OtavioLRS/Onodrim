@@ -81,6 +81,13 @@ export default class Mapa extends Component {
     else alert('Você não tem permissão para acessar esta sessão!');
   }
 
+  handleLogout = async () => {
+    this.setState({loading: false});
+    await AsyncStorage.removeItem('usuario');
+    this.setState({loading: true});
+    this.navegar('SignIn');
+  }
+
   async componentDidMount() {
     await Geolocation.clearWatch(this.watchID);
     await Geolocation.watchPosition(
@@ -165,21 +172,26 @@ export default class Mapa extends Component {
                 title={marker.nome}
                 description={marker.nome_cientifico}
                 coordinate={marker.latlong}
+                onPress={() => {
+                  // const aux = {
+                  //   nome_cientifico: marker.nome_cientifico,
+                  //   fotos: marker.fotos,
+                  //   nome_cientifico: marker.nome_cientifico,
+                  // }
+                  // await AsyncStorage.setItem('marker', JSON.stringify(aux));
+                }}
                 pinColor={'green'}
               >
-                <MapView.Callout tooltip={true}>
+                <MapView.Callout 
+                  tooltip={true} 
+                  onPress={() => {
+                    // this.navegar('Detalhes');
+                  }}
+                >
                   <View style={styles.place}>
-                    <Text>
-                      <Image
-                        style={{ height: 50, width: 50 }}
-                        source={{ uri: marker.foto }}
-                        resizeMode="cover"
-                      />
-                    </Text>
                     <Text style={styles.description}>
-                      Id: {marker.id}{"\n"}
                       Nome popular: {marker.nome}{"\n"}
-                      Nome científico: {marker.nome_cientifico}
+                      Nome científico: {marker.nome_cientifico}{"\n"}
                     </Text>
                   </View>
                 </MapView.Callout>
@@ -227,6 +239,12 @@ export default class Mapa extends Component {
                 <TextButton>Analisar sugestões</TextButton>
               </Button>
             </FooterTab>
+          <FooterTab style={{ backgroundColor: "#78D561" }}>
+            <Button onPress={this.handleLogout}>
+              <Icon name="person" style={{ color: 'white' }} />
+              <TextButton>Logout</TextButton>
+            </Button>
+          </FooterTab>
           </Footer>
         }
 

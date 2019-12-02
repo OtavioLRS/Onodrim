@@ -7,6 +7,7 @@ import Arvore from './pages/arvore';
 import SignIn from './pages/signIn';
 import SignUp from './pages/signUp';
 import Checagem from './pages/checagem';
+import Detalhes from './pages/detalhes';
 
 const Routes = createStackNavigator({
   SignIn,
@@ -16,6 +17,7 @@ const Routes = createStackNavigator({
   Arvore,
   Especie,
   Checagem,
+  Detalhes,
 });
 
 export default createAppContainer(Routes);

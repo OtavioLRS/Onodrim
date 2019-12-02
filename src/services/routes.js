@@ -56,6 +56,7 @@ routes.get('/tipos', (req, res) => {
 });
 
 routes.get('/sugestoes', (req, res) => {
+    console.log(req);
     connection.getConnection(function (err, connection) {
         connection.query(`SELECT * FROM Tipo WHERE checado = 1;`, (error, results, fields) => {
             console.log(results, error);
